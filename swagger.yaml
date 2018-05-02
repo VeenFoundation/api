@@ -7,8 +7,45 @@ basePath: /v1
 info:
   description: |
     이 명세서는 리빈 프로젝트의 API 설계 명세서입니다. (작성자: 이도현)
-  version: 0.0.3-beta
-  title: Liveen Project (for beta)
+    # 소개
+    리빈의 프론트 엔드는 **웹 사이트**, **안드로이드(모바일)**, **iOS(모바일)**가 있습니다. 리빈 API 서버는 다양한 플랫폼을 지원하기 위해 서비스를 REST API로 제공해야 합니다.
+    리빈 서비스는 약 8월 중순경에 오픈할 예정이며 초기에 모든 서비스는 **아마존 클라우드**를 이용합니다.     
+    # 서버구성
+    리빈은 글로벌 시장을 겨냥하고 있는 데다가 국내에서는 블록체인을 이용한 최초의 B2C 서비스인만큼 런칭 초기에 많은 관심이 쏠릴 수 있습니다.
+    트래픽이 급증해도 원할한 서비스를 제공하기 위해 API 서버는 Docker 컨테이너로 관리하고 ELB서비스와 Auto-scaling을 이용해서 클러스터링을 구성할 계획입니다.
+
+    서버를 Docker 컨테이너로 관리하기 때문에 데이터 저장소와 상태 정보(세션 등)을 독립적으로 분리시켜야 합니다. 데이터 저장소는 어느정도 수준의 무결성과 가용성을 보장해주는 Amazon RDS를 사용합니다. RDS는 ReplicaSet을 지정하는게 비교적 쉬운 편인데다가
+    버튼 하나로 쉽게 스냅샷을 만들 수 있어서 백업을 쉽게 할 수 있습니다. 이런 편의기능들은 서비스 초기에 데이터 저장소를 구축하는데 드는 비용을 대폭 낮춰줍니다.
+
+    Docker 컨테이너는 언제나 장애가 발생할 수 있기 Stateless-Server여야 합니다. 이 원칙을 지키기 위해서 사용자의 세션정보 같은 상태들은 독립적인 In-Memory 데이터베이스에서 관리합니다. 우리는 Redis를 사용하기로 했습니다.
+    정적 컨텐츠는 Amazon S3보다 좋은 선택지가 없어서 무난하게 S3에다가 저장합니다.
+    # 검색
+    리빈은 검색기능이 많은 서비스입니다. 태그에 의한 검색, 위치에 의한 검색, 키워드에 의한 검색 등 다양한 검색서비스를 제공해야 합니다. 이 분야에서는 Elastic Search 엔진이 편리한 인터페이스와 막강한 검색 기능을 제공합니다. Elastic Search는 네이버, 구글, 페이스북, 깃허브 등 다수의 대기업에서 검증되었습니다.
+    # 컴포넌트
+    리빈 베타버전에서 다루는 컴포넌트들은 다음과 같습니다.
+      - User
+      - Post
+      - Eval
+      - Report
+      - Resource
+      - Wallet
+      - Search
+      - Timeline
+      - QNA
+      - FAQ
+      - Policies
+    # 리빈 개체-관계 모델링
+    - Fundamental Logic
+    ![이미지](images/fundamental_logic.png)
+
+    - Administration
+    ![이미지2](images/administration.png)
+    # 서버 아키텍쳐 도식
+    ![서버아키텍쳐](images/architecture.png)
+
+    서버의 아키텍쳐를 단순화 한 그림입니다. 실제 운영에서는 로그 서버와 API서버 사이에 RabbitMQ같은 브로커들이 있을 수 있습니다. 이 부분은 실제로 서비스를 운영하면서 수정할 계획입니다. 현재 사업 준비 단계에서 모든 사이드이펙트를 계산해서 서버를 구성하는 것은 시간낭비 일 수 있습니다.
+  version: 0.0.2
+  title: Liveen Project
   termsOfService: 'http://swagger.io/terms/'
   contact:
     email: cailhuiris@finotek.co.kr
@@ -17,29 +54,51 @@ info:
 tags:
   - name: user
     description: 사용자 기능
-  - name: location
-    description: 위치 저장 기능
+  - name: post
+    description: 포스팅 기능
+  - name: eval
+    description: 평가 기능, 사용자는 글이나 댓글에 `좋아요` 또는 `싫어요`를 할 수 있다.
+  - name: report
+    description: 사용자는 특정 글, 댓글, 사람에게 신고를 할 수 있다.
+  - name: resource
+    description: 사용자는 이미지, 동영상 같은 리소스를 업로드 할 수 있다. 실제로는 S3에 저장하고 링크만 DB에 저장한다.
   - name: wallet
-    description: 지갑 기능
+    description: VEEN의 잔고확인, 송금, 입금내역열람 등을 할 수 있다.
+  - name: search
+    description: 사용자는 다른 유저 혹은 게시글을 검색할 수 있다.
+  - name: timeline
+    description: 사용자는 추천알고리즘을 통해서 개인화된 컨텐츠를 제공 받을 수 있다.
+  - name: qna
+    description: 사용자는 고객센터에 질의응답을 할 수 있다.
+  - name: faq
+    description: 사용자는 미리 작성된 FAQ를 볼 수 있다.      
+  - name: policies
+    description: 사용자는 이용약관 등의 정책을 볼 수 있다.
 x-tagGroups:
   - name: Fundamental Logic
     tags:
       - user
-      - location
+      - post
+      - eval
+      - report
+      - resource
       - wallet
+      - search
+      - timeline
+      - qna
+      - faq
+      - policies
 x-servers:
   - url: //api.liveen.io/v1
     description: Production Server
   - url: //test.liveen.io/v1
     description: Test Server
 paths:
-  # 사용자 가입
   /user:
     post:
       tags:
         - user
-      summary: 사용자 가입
-      description: 사용자 가입 이 후, 유효한 이메일 계정인지 확인하기 위해 해당 이메일로 승인 URL을 전송합니다.
+      summary: 사용자 생성
       operationId: createUser
       produces:
         - application/json
@@ -54,52 +113,34 @@ paths:
         default:
           description: Successful Operation
         '400':
-          description: 입력값의 형식이 틀렸을 때 발생
+          description: 입력값의 형식이 틀렸을 대 발생
           schema:
-            $ref: '#/definitions/FormError'
+            $ref: '#/definitions/Error'
         '409':
           description: 중복된 이메일로 가입을 요청했을 때 발생합니다.
   '/user/{id}':
-  # 사용자 정보 조회
-    get:
-      tags:
-        - user
-      summary: 사용자 정보 조회
-      operationId: getUser
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: access-token
-          description: 사용자 세션 토쿤
-          required: true
-          type: string
-      responses:
-        default:
-          description: Successful Operation
-          schema:
-            $ref: '#/definitions/User'
-        '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
-  # 사용자 수정
     put:
       tags:
         - user
-      summary: 사용자 수정
+      summary: 사용자 정보 수정
       operationId: updateUser
       produces:
         - application/json
       parameters:
         - in: header
-          name: access-token
-          description: 사용자 세션 토쿤
-          required: true
+          name: SID
+          description: Session ID
           type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
         - in: body
           name: body
-          description: Upload profile image.
+          description: 수정할 사용자 정보 객체, 이메일과 비밀번호는 변경할 수 없다.
           required: true
           schema:
             $ref: '#/definitions/UpdateUser'
@@ -107,101 +148,1584 @@ paths:
         default:
           description: Successful Operation
         '400':
-          description: 입력값의 형식이 틀렸을 때 발생
+          description: 입력값의 형식이 틀렸을 대 발생
           schema:
-            $ref: '#/definitions/FormError'
-        '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
-  # 프로필 사진 업로드
-  /user/profile:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - user
+      summary: 사용자 정보 삭제
+      operationId: deleteUser
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: body
+          description: 사용자 이메일로 보낸 토큰과 비밀번호를 입력값을 받는다.
+          required: true
+          schema:
+            type: object
+            properties:
+              token:
+                description: 이메일로 전송한 Token
+                type: string
+                example: 28938asdjenejf83713nsdk83ndAd83hd$
+              password:
+                description: 사용자 비밀번호
+                type: string
+                example: drowssaP123!
+      responses:
+        default:
+          description: Successful Operation
+        '404':
+          description: 비밀번호가 일치하지 않습니다
+  '/user/{id}/activate':
     post:
       tags:
         - user
-      summary: 프로필 사진 추가
-      operationId: uploadProfileImage
+      summary: 계정 활성화
+      description: 계정을 활성화 해야 글/댓글/팔로우 등의 활동을 할 수 있다. (비활성화 상태에서도 컨텐츠는 볼 수 있다.)
+      operationId: activateUser
       produces:
         - application/json
       parameters:
-        - in: header
-          name: access-token
-          description: 사용자 세션 토큰
-          required: true
+        - in: query
+          name: token
+          description: 활성화 토큰 (회원가입할 때 이메일로 전송한다.)
           type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Successful Operation
+        '404':
+          description: 토큰 값이 존재 하지 않을때 발생한다.
+  '/user/login':
+    post:
+      tags:
+        - user
+      summary: 로그인
+      description: 로그인에 성공하면 세션값을 리턴한다.
+      operationId: activateUser
+      produces:
+        - application/json
+      parameters:
         - in: body
-          name: body
-          description: Upload profile image.
           required: true
           schema:
-            $ref: '#/definitions/UserProfileUpload'
+            type: object
+            properties:
+              email:
+                type: string
+                description: 사용자 ID
+                example: cailhuiris@finotek.co.kr
+              password:
+                type: string
+                description: 사용자 비밀번호
+                example: nf83bdj34Y383!
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: object
+            properties:
+              sid:
+                type: string
+                description: 세션 ID
+        '404':
+          description: 일치하는 사용자 계정이 없으면 발생한다.
+  '/user/find_password':
+    post:
+      tags:
+        - user
+      summary: 비밀번호 찾기
+      operationId: findPassword
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: 사용자 ID
+                example: cailhuiris@finotek.co.kr
+      responses:
+        default:
+          description: 해당 이메일로 비밀번호를 변경할 수 있는 링크를 보내준다. (링크에는 Query String으로 3분짜리 token이 제공됨), token은 세션 서버에 저장한다.
+        '404':
+          description: 일치하는 사용자 이메일이 없으면 발생한다.
+  '/user/{id}/password':
+    put:
+      tags:
+        - user
+      summary: 비밀번호 변경
+      operationId: changePassword
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: token
+          description: 활성화 토큰 (회원가입할 때 이메일로 전송한다.)
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+                description: 신규 비밀번호
       responses:
         default:
           description: Successful Operation
         '400':
-          description: 입력값의 형식이 틀렸을 때 발생
+          description: 토큰이 일치하지 않을 때 발생
+  '/user/{id}/profile':
+    get:
+      tags:
+        - user
+      summary: 사용자 프로필 조회
+      operationId: getProfile
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Successful Operation
           schema:
-            $ref: '#/definitions/FormError'
+            $ref: '#/definitions/UserProfile'
+  '/user/{id}/follow/{other_user_id}':
+    post:
+      tags:
+        - user
+      summary: 팔로우 하기
+      operationId: followUser
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+        - name: other_user_id
+          in: path
+          description: 팔로우 할 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Successful Operation
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500': 
-          description: 업로드에 실패했을 때 발생합니다.
-  # 지갑 입출금 내역 조회
-  /wallet/transactions:
+          description: 세션 ID가 일치하지 않을 경우
+        '404':
+          description: 사용자 index ID가 존재하지 않는 경우
+        '409':
+          description: 이미 팔로우 한 사용자일 경우
+    delete:
+      tags:
+        - user
+      summary: 팔로우 취소
+      operationId: cancelFollow
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+        - name: other_user_id
+          in: path
+          description: 팔로우 취소 할 사용자 index ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 ID가 일치하지 않을 경우
+        '404':
+          description: 사용자 index ID가 존재하지 않는 경우
+        '409':
+          description: 팔로우 하지 않은 사용자를 취소하는 경우
+  '/user/{id}/followers':
+    get:
+      tags:
+        - user
+      summary: 내 팔로워 조회
+      operationId: fetchFollowers
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64 
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  description: 팔로워의 사용자 index ID
+                  type: integer
+                name: 
+                  description: 팔로워 이름
+                  type: string
+                profileImage:
+                  description: 프로필 이미지
+                  type: string
+        '404':
+          description: 존재하지 않는 사용자 조회
+  '/user/{id}/followings':
+    get:
+      tags:
+        - user
+      summary: 내 팔로잉 조회
+      description: 나를 팔로우한 유저들을 조회한다
+      operationId: fetchFollowings
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64 
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  description: 사용자 index ID
+                  type: integer
+                name: 
+                  description: 팔로워 이름
+                  type: string
+                profileImage:
+                  description: 프로필 이미지
+                  type: string
+        '404':
+          description: 존재하지 않는 사용자 조회
+  '/user/{id}/alarm':
+    get:
+      tags:
+        - user
+      summary: 알람 설정 정보 조회
+      operationId: getAlarmSettings
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64 
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/AlarmSettings'
+        '401':
+          description: 세션 ID가 일치하지 않음
+    put:
+      tags:
+        - user
+      summary: 알람 설정 정보 변경
+      operationId: updateAlarmSettings
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 사용자 index ID
+          required: true
+          type: integer
+          format: int64 
+        - in: body
+          description: 알람 설정 정보
+          required: true
+          schema:
+            $ref: '#/definitions/AlarmSettings'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 ID가 일치하지 않음
+  '/post':
+    post:
+      tags:
+        - post
+      summary: 포스팅 하기
+      operationId: createPost
+      produces:
+        - application/json
+      parameters:
+        - name: SID
+          in: header
+          description: Session ID
+          type: string
+          required: true
+        - in: body
+          description: 포스팅 정보
+          required: true
+          schema:
+            $ref: '#/definitions/NewPosting'
+      responses:
+        default:
+          description: Successful Operation
+          schame:
+            type: object
+            propeties:
+              postId:
+                description: 생성된 포스트의 index ID
+                type: integer
+        '401':
+          description: 세션 ID가 일치하지 않음
+  '/post/{id}':
+    get:
+      tags: 
+        - post
+      summary: 포스트 조회하기
+      operationId: getPost
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+        - in: body
+          description: 포스팅 정보
+          required: true
+          schema:
+            $ref: '#/definitions/Posting'
+      responses:
+        default:
+          description: Successful Operation
+        '404':
+          description: 해당 게시글이 존재하지 않음
+    put:
+      tags:
+        - post
+      summary: 포스트 수정하기
+      operationId: updatePost
+      produces:
+        - application/json
+      parameters:
+        - name: SID
+          in: header
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+        - in: body
+          description: 포스팅 정보
+          required: true
+          schema:
+            $ref: '#/definitions/NewPosting'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 ID가 일치하지 않음
+        '404':
+          description: 해당 게시글이 존재하지 않음
+    delete:
+      tags:
+        - post
+      summary: 포스트 삭제하기
+      operationId: deletePost
+      produces:
+        - application/json
+      parameters:
+        - name: SID
+          in: header
+          description: Session ID
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 ID가 일치하지 않음
+        '404':
+          description: 해당 게시글이 존재하지 않음
+  '/post/{id}/preview':
+    get:
+      tags:
+        - post
+      summary: 포스트 프리뷰 정보
+      operationId: getPostPreview
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/PostPreview'
+        '404':
+          description: 해당 게시글이 존재하지 않음
+  '/post/{id}/comments':
+    get:
+      tags:
+        - post
+      summary: 포스팅 댓글
+      operationId: fetchPostComments
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+        '404':
+          description: 해당 게시글이 존재하지 않음
+  '/post/{id}/comment':
+    post:
+      tags:
+        - post
+      summary: 댓글 추가
+      operationId: addPostComment
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+        - in: header
+          name: SID
+          description: Session ID / 회원만 댓글을 작성할 수 있습니다.
+          type: string
+          required: true
+        - in: body
+          description: 댓글 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              content:
+                description: 댓글 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: object
+            properties:
+              id:
+                description: 추가된 코멘트의 ID
+                type: integer
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '404':
+          description: 댓글을 작성하려는 포스팅이 존재하지 없습니다.
+  '/post/{id}/comment/{comment_id}':
+    put:
+      tags:
+        - post
+      summary: 댓글 수정
+      operationId: updateComment
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID / 회원만 댓글을 작성할 수 있습니다.
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+        - name: comment_id
+          in: path
+          description: 댓글 index ID
+          type: integer
+          required: true
+        - in: body
+          description: 댓글 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              content:
+                description: 댓글 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '403':
+          description: 댓글을 수정할 권한이 없습니다.
+        '404':
+          description: 댓글을 작성하려는 포스팅이 존재하지 없습니다.
+    delete:
+      tags:
+        - post
+      summary: 댓글 삭제
+      operationId: deleteComment
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID / 회원만 댓글을 작성할 수 있습니다.
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: 포스트 index ID
+          type: integer
+          required: true
+        - name: comment_id
+          in: path
+          description: 댓글 index ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '403':
+          description: 댓글을 수정 할 권한이 없습니다.
+        '404':
+          description: 댓글을 삭제하려는 포스팅이 존재하지 없습니다.
+  '/eval/like':
+    post:
+      tags:
+        - eval
+      summary: 좋아요 하기
+      description: 사용자는 글, 댓글에 좋아요를 할 수 있다.
+      operationId: like
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID / 회원만 좋아요를 할 수 있습니다.
+          type: string
+          required: true
+        - in: body
+          description: 좋아요 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              evaluableId:
+                description: 평가하려는 데이터(글, 댓글)의 ID
+                type: integer
+                example: 2018
+              evaluableType:
+                description: 평가하려는 항목(글이면 'post', 댓글이면 'comment' 이다)
+                type: string
+                example: 'post'
+              value:
+                description: 1이면 좋아요, 0이면 싫어요
+                type: integer
+                example: 1
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '404':
+          description: 좋아요를 하려는 글, 댓글이 없습니다.
+    delete:
+      tags:
+        - eval
+      summary: 좋아요 취소
+      operationId: cancelLike
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: body
+          description: 좋아요 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              evaluableId:
+                description: 평가하려는 데이터(글, 댓글)의 ID
+                type: integer
+                example: 2018
+              evaluableType:
+                description: 평가하려는 항목(글이면 'post', 댓글이면 'comment' 이다)
+                type: string
+                example: 'post'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '404':
+          description: 취소하려는 데이터의 ID가 존재하지 않습니다.
+  '/eval/dislike':
+    post:
+      tags:
+        - eval
+      summary: 싫어요 하기
+      operationId: dislike
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: body
+          description: 좋아요 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              evaluableId:
+                description: 평가하려는 데이터(글, 댓글)의 ID
+                type: integer
+                example: 2018
+              evaluableType:
+                description: 평가하려는 항목(글이면 'post', 댓글이면 'comment' 이다)
+                type: string
+                example: 'post'
+              value:
+                description: 1이면 좋아요, 0이면 싫어요
+                type: integer
+                example: 0
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '404':
+          description: 좋아요를 하려는 글, 댓글이 없습니다.
+    delete:
+      tags:
+        - eval
+      summary: 싫어요 취소
+      operationId: cancelDislike
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: body
+          description: 좋아요 정보
+          required: true
+          schema:
+            type: object
+            properties:
+              evaluableId:
+                description: 평가하려는 데이터(글, 댓글)의 ID
+                type: integer
+                example: 2018
+              evaluableType:
+                description: 평가하려는 항목(글이면 'post', 댓글이면 'comment' 이다)
+                type: string
+                example: 'post'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '404':
+          description: 취소하려는 데이터의 ID가 존재하지 않습니다.
+  '/report/post/{id}':
+    post:
+      tags:
+        - report
+      summary: 포스트 신고하기
+      operationId: reportPost
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID / 가입된 회원만 신고할 수 있다.
+          type: string
+          required: true
+        - in: path
+          name: 'id'
+          description: 신고하려는 포스트의 ID
+          type: integer
+          format: int64
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              reason: 
+                description: 신고 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '403':
+          description: 신고할 수 있는 권한이 없습니다.
+        '404':
+          description: 취소하려는 데이터의 ID가 존재하지 않습니다.
+  '/report/comment/{id}':
+    post:
+      tags:
+        - report
+      summary: 댓글 신고하기
+      operationId: reportComment
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: 'id'
+          description: 신고하려는 댓글의 ID
+          type: integer
+          format: int64
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              reason: 
+                description: 신고 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '403':
+          description: 신고할 수 있는 권한이 없습니다.
+        '404':
+          description: 취소하려는 데이터의 ID가 존재하지 않습니다.
+  '/report/user/{id}':
+    post:
+      tags:
+        - report
+      summary: 사용자 신고하기
+      operationId: reportUser
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: 'id'
+          description: 신고하려는 사용자의 ID
+          type: integer
+          format: int64
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              reason: 
+                description: 신고 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 사용자 세션 ID가 없습니다.
+        '403':
+          description: 신고할 수 있는 권한이 없습니다.
+        '404':
+          description: 취소하려는 데이터의 ID가 존재하지 않습니다.
+  '/resource/upload':
+    post:
+      tags:
+        - resource
+      summary: 리소스 저장
+      description: 실제로는 S3저장소에 저장이되고 데이터베이스에는 링크만 저장 됩니다.
+      operationId: saveResource
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              fileNane: 
+                description: 파일명
+                type: string
+                required: true
+              fullpath:
+                description: 경로 (확장자 포함)
+                type: string
+                required: true
+              filepath:
+                description: 경로 (확장자 미포함)
+                type: string
+                required: true
+              extension:
+                description: 확장자 명
+                type: string
+                required: true
+              resourceableId:
+                description: 자원 ID값
+                type: integer
+              resourceableType:
+                description: 자원의 종류
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '400':
+          description: 알 수 없는 문제로 인하여 업로드에 실패하였습니다.
+  '/wallet/{user_id}/overview':
     get:
       tags:
         - wallet
-      summary: 송금내역조회
-      operationId: fetchTransactions
+      summary: 지갑 개요
+      operationId: getOverviewOfWallet
       produces:
         - application/json
       parameters:
         - in: header
-          name: access-token
-          description: 사용자 세션 토큰
+          name: SID
+          description: Session ID
+          type: string
           required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
           type: string
       responses:
         default:
           description: Successful Operation
           schema:
-            $ref: '#/definitions/Transactions'
+            type: object
+            properties:
+              address:
+                description: 지갑 주소
+                type: string
+              balance: 
+                description: 잔액
+                type: object
+                properties:
+                  ethereum:
+                    description: 이더리움 잔액
+                    type: float
+                    example: 3.23
+                  veen:
+                    description: Veen 잔액
+                    type: float
+                    example: 239383.32
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500': 
-          description: 서버 에러
-  # 위치 정보 업로드
-  /location:
-    post:
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+  '/wallet/{user_id}/balance':
+    get:
       tags:
-        - location
-      summary: 위치 정보 업로드
-      operationId: uploadLocation
+        - wallet
+      summary: 지갑 잔액
+      operationId: getOverviewOfWallet
       produces:
         - application/json
       parameters:
         - in: header
-          name: access-token
-          description: 사용자 세션 토큰
+          name: SID
+          description: Session ID
+          type: string
           required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: object
+            properties:
+              balance: 
+                description: 잔액
+                type: object
+                properties:
+                  ethereum:
+                    description: 이더리움 잔액
+                    type: float
+                    example: 3.23
+                  veen:
+                    description: Veen 잔액
+                    type: float
+                    example: 239383.32
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+  '/wallet/{user_id}/earnings':
+    get:
+      tags:
+        - wallet
+      summary: 수입 내역
+      operationId: myEarnings
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                postId:
+                  description: 작성한 포스트 ID
+                  type: integer
+                veen:
+                  description: Veen 수익
+                  type: integer
+                reaches:
+                  description: 도달 횟수
+                  type: integer
+                likes:
+                  description: 좋아요 개수
+                  type: integer
+                hates:
+                  description: 싫어요 개수
+                  type: integer
+                startDate:
+                  description: 시작 날짜
+                  type: date-time
+                endDate:
+                  description: 종료 날짜
+                  type: date-time
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+  '/wallet/{user_id}/deposits':
+    get:
+      tags:
+        - wallet
+      summary: 입금 내역
+      operationId: myDeposits
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                sender:
+                  description: 보낸 사람의 주소
+                  type: string
+                amount:
+                  type: object
+                  properties:
+                    ethereum:
+                      description: 입금된 이더리움 개수
+                      type: float
+                    veen:
+                      description: 입금된 Veen 개수
+                      type: float
+                date:
+                  description: 입금 날짜
+                  type: date-time
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+  '/wallet/{user_id}/transfers':
+    get:
+      tags:
+        - wallet
+      summary: 송금 내역
+      operationId: myTransfers
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                receiver:
+                  description: 받은 사람의 주소
+                  type: string
+                amount:
+                  type: object
+                  properties:
+                    ethereum:
+                      description: 송금한 이더리움 개수
+                      type: float
+                    veen:
+                      description: 송금한 Veen 개수
+                      type: float
+                fee:
+                  description: 이더리움 수수료
+                  type: float
+                date:
+                  description: 송금 날짜
+                  type: date-time
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+  '/wallet/{user_id}/transfer':
+    post:
+      tags:
+        - wallet
+      summary: 송금 하기
+      operationId: transfer
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
           type: string
         - in: body
-          name: body
-          description: 위치 정보.
+          description: 송금 정보
           required: true
           schema:
-            $ref: '#/definitions/Location'
+            type: object
+            properties:
+              receiver:
+                description: 받을 사람의 주소
+                type: string
+              amount:
+                type: object
+                properties:
+                  ethereum:
+                    description: 송금한 이더리움 개수
+                    type: float
+                  veen:
+                    description: 송금한 Veen 개수
+                    type: float
+              fee:
+                description: 이더리움 수수료
+                type: float
+              date:
+                description: 송금 날짜
+                type: date-time
       responses:
         default:
           description: Successful Operation
         '400':
-          description: 입력값의 형식이 틀렸을 때 발생
+          description: 입력 형식이 잘못된 경우 밠행한다.
           schema:
-            $ref: '#/definitions/FormError'
+            $ref: '#/definitions/Error'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500': 
-          description: 업로드에 실패했을 때 발생합니다.
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 해당 지갑을 열어 볼 권한이 없습니다.
+        '404':
+          description: 송금 받을 사람의 주소가 존재하지 않습니다.
+  '/search?by=id':
+    post:
+      tags:
+        - search
+      summary: ID로 사용자 검색
+      operationId: searchById
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          description: 검색 조건
+          required: true
+          schema:
+            type: object
+            properties:
+              keyword:
+                description: 검색 키워드
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserSearchResult'
+        '404':
+          description: 일치하는 결과가 없습니다.
+  '/search?by=name':
+    post:
+      tags:
+        - search
+      summary: 이름으로 사용자 검색
+      operationId: searchByName
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          description: 검색 조건
+          required: true
+          schema:
+            type: object
+            properties:
+              keyword:
+                description: 검색 키워드
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserSearchResult'
+        '404':
+          description: 일치하는 결과가 없습니다.
+  '/search?by=hastag':
+    post:
+      tags:
+        - search
+      summary: 해시태그로 포스팅 글 검색
+      operationId: searchByHashTag
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          description: 검색 조건
+          required: true
+          schema:
+            type: object
+            properties:
+              keyword:
+                description: 검색 키워드
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PostPreview'
+        '404':
+          description: 일치하는 결과가 없습니다.
+  '/search?by=location':
+    post:
+      tags:
+        - search
+      summary: 위치로 포스팅 글 검색
+      operationId: searchByLocation
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          description: 검색 조건
+          required: true
+          schema:
+            type: object
+            properties:
+              latitude:
+                description: 위도
+                type: float
+              longitude:
+                description: 경로
+                type: float
+              range:
+                description: 검색 범위
+                type: float
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PostPreview'
+        '404':
+          description: 일치하는 결과가 없습니다.
+  '/timeline/{user_id}':
+    post:
+      tags:
+        - timeline
+      summary: 타임라인 조회
+      description: 개인 맞춤 추천 글들을 보여준다.
+      operationId: newsfeed
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PostPreview'
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+  '/qna/list/{user_id}':
+    get:
+      tags:
+        - qna
+      summary: 질의응답 리스트
+      description: 내가 질문한 질의응답 내역을 보여준다.
+      operationId: fetchQNAList
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          description: 사용자 ID
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/QNA'
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+  '/qna':
+    post:
+      tags:
+        - qna
+      summary: 질문하기
+      description: 사용자가 고객센터에 질문한다.
+      operationId: createQuestion
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: body
+          description: 질문 내용
+          required: true
+          schema:
+            type: object
+            properties:
+              question:
+                description: 질문 내용
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: object
+            properties:
+              qnaId: 
+                description: 생성한 질의응답 ID
+                type: integer
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+  '/qna/{id}':
+    get:
+      tags:
+        - qna
+      summary: 질문 조회
+      description: 사용자가 고객센터에 질문한다.
+      operationId: createQuestion
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: id
+          description: 질문 ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/QNA'
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+    put:
+      tags:
+        - qna
+      summary: 질문 내용 수정
+      operationId: updateQuestion
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: id
+          description: 질문 ID
+          type: integer
+          required: true
+        - in: body
+          description: 수정 할 내용
+          required: true
+          schema:
+            type: object
+            properties:
+              question:
+                description: 수정 할 질문
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 이미 답변이 달린 질문은 수정이 불가능 합니다.
+    delete:
+      tags:
+        - qna
+      summary: 질문 삭제
+      operationId: deleteQuestion
+      produces:
+        - application/json
+      parameters: 
+        - in: header
+          name: SID
+          description: Session ID
+          type: string
+          required: true
+        - in: path
+          name: id
+          description: 질문 ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 일치하는 세션 ID가 없습니다.
+        '403':
+          description: 이미 답변이 달린 질문은 삭제가 불가능 합니다.
+  '/faq/list':
+    get:
+      tags:
+        - faq
+      summary: FAQ 리스트
+      operationId: fetchFAQ
+      produces:
+        - application/json
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FAQ'
+  '/faq/{id}':
+    get:
+      tags:
+        - faq
+      summary: FAQ 정보 조회
+      operationId: getFAQ
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: FAQ ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/FAQ'
+  '/policies':
+    get:
+      tags:
+        - policies
+      summary: 이용 약관 정보 조회
+      operationId: fetchPolicies
+      produces:
+        - application/json
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Policy'
+  '/policy/{id}':
+    get:
+      tags:
+        - policies
+      summary: 특정 정책 정보 조회
+      operationId: fetchPolicies
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: 정책 ID
+          type: integer
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/Policy'
 definitions:
   ErrorField:
     type: object
@@ -214,7 +1738,7 @@ definitions:
         description: '에러 메시지'
         type: string
         example: '아이디 입력값은 반드시 입력해야 합니다.'
-  FormError:
+  Error:
     type: object
     properties:
       status:
@@ -248,110 +1772,292 @@ definitions:
         minLength: 8
         pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
         example: drowssaP123!
-      address:
-        description: 사용자의 지갑 주소
+      introduction:
+        description: 200자 이내의 짧은 사용자 소개 글
         type: string
-        minLength: 1
-        example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608e2B6a123n
-      publicKey:
-        description: 사용자의 공개 키
-        type: string
-        minLength: 1
-        example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608123h81h38
+        maxLength: 200
+        example: 안녕하세요. 이도현 입니다.
+      profile_image:
+        description: 프로필 이미지의 리소스 ID를 입력값으로 넘긴다.
+        type: integer
+        format: int64
   UpdateUser:
     type: object
     properties:
-      userId:
-        description: 사용자 아이디
-        type: integer
-        minLength: 1
-        example: 1
       name:
         description: 사용자 이름
         type: string
         minLength: 4
         example: David Lee
-  UserProfileUpload:
+      introduction:
+        description: 200자 이내의 짧은 사용자 소개 글
+        type: string
+        maxLength: 200
+        example: 안녕하세요. 이도현 입니다.
+      profile_image:
+        description: 프로필 이미지의 리소스 ID를 입력값으로 넘긴다.
+        type: integer
+        format: int64
+  UserProfile:
     type: object
     properties:
-      userId:
-        descrition: 업로드하려는 사용자의 아이디
-        type: integer
-        example: 1
-      imageUrl:
-        description: 업로드 된 프로필 사진 URL, 해당 필드가 주어지지 않은 경우엔 default 사진을 보여준다.
-        type: string
-        example: https://s3-aws.amazon.com/reahrkahr/weqhehuih/profile.png
-  User:
-    type: object
-    properties:
-      userId:
-        description: 사용자의 index
-        type: integer
-        example: 1
-      name:
-        description: 사용자 이름
-        type: string
-        minLength: 4
-        example: David Lee
       email:
-        description: 이메일 주소, 실질적으로 아이디로 사용한다.
+        description: 사용자 아이디
         type: string
-        minLength: 1
         example: cailhuiris@finotek.co.kr
-      profileImage:
-        description: 프로필 사진 URL
+      name: 
+        description: 사용자 이름
         type: string
-        example: https://s3-aws.amazon.com/reahrkahr/weqhehuih/profile.png
-      address:
-        description: 사용자의 지갑 주소
+        example: David Lee
+      introduction:
+        description: 소개글
         type: string
-        minLength: 1
-        example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608e2B6a123n
+        example: 안녕하세요. 개발자 이도현 입니다.
+      picture:
+        description: 프로필 사진
+        type: string
+      followers:
+        description: 팔로워 수
+        type: integer
+        example: 312
+      followings:
+        description: 팔로잉 수
+        type: integer
+        example: 273
+      numberOfArticles:
+        description: 게시글 수
+        type: integer
+        example: 12
+      refutation:
+        description: 평판
+        type: integer
+        example: 312
+      articles:
+        type: array
+        items:
+          $ref: '#/definitions/PostPreview'
+  AlarmSettings:
+    type: object
+    properties:
+      useOrNot:
+        description: '알림 ON/OFF'
+        type: boolean
+      soundOrNot:
+        description: '소리 ON/OFF'
+        type: boolean
+      likeAlarm:
+        description: '좋아요 알림'
+        type: boolean
+      dislikeAlarm:
+        description: '싫어요 알림'
+        type: boolean
+      commentAlarm:
+        description: '댓글 알림'
+        type: boolean
+      commentLikeAlarm:
+        description: '댓글 좋아요 알림'
+        type: boolean
+      commentDislikeAlarm:
+        description: '댓글 싫어요 알림'
+        type: boolean
+      followingAlarm:
+        description: '팔로워 알림'
+        type: boolean
+      tagAlarm:
+        description: '사용자 태그 알림'
+        type: boolean
+  PostPreview:
+    type: object
+    properties:
+      id:
+        description: 포스트의 index ID
+        type: integer
+        example: 212
+      author:
+        description: 작성자 이름
+        type: string
+        example: David Lee
+      authorProfile:
+        description: 작성자 사진
+        type: string  
+      summary:
+        description: 프리뷰 화면에서 보여줄 요약 글
+        type: string
+      thumbnail:
+        description: 프리뷰 썸네일 (S3저장소의 이미지 링크)
+        type: string
+      location:
+        $ref: '#/definitions/Location'
+      createdAt:
+        description: 작성 날짜
+        type: date-time
+  NewPosting:
+    type: object
+    properties:
+      content:
+        description: 포스팅 내용
+        type: string
+        example: '안녕하세요! 여기는 도쿄입니다. :-)'
+      resources:
+        description: 이미지, 동영삳 등의 리소스들, 실제 포스트에서 보여지는 순서는 배열의 순서와 일치한다.
+        type: array
+        items:
+          type: integer
+      postTags:
+        description: 포스팅에 등록한 태그들
+        example: ['도쿄', '꽃길', '러브']
+        type: array
+        itmes:
+          type: string
+      userTags:
+        description: 태그한 사용자들
+        example: [239, 94759, 3938]
+        type: array
+        itmes:
+          type: integer
+          format: int64
+      location:
+        $ref: '#/definitions/Location'
   Location:
     type: object
     properties:
+      name: 
+        description: 위치 이름
+        type: string
       latitude:
         description: 위도
         type: float
-        minLength: 1
         example: 37.5662952
       longitude:
         description: 경도
         type: float
-        minLength: 1
         example: 126.97794509999994
-  Transactions:
-    type: array
-    items:
-      type: object
-      properties:
-        type:
-          description: 송금인지, 입금인지 나타낸다. ('s', 'r') 로 구분한다.
-          type: string
-          minLength: 1
-          example: s
-        amount:
-          description: VEEN 의 양
-          type: integer
-          minLength: 1
-          example: 10000
-        from:
-          description: 보낸이 주소
-          type: string
-          minLength: 1
-          example: 0xeirne38y37h47h454j54h84h
-        to:
-          description: 받은이 주소 (나한테 입근된거라면 to의 주소는 내 주소가 된다.)
-          type: string
-          minLength: 1
-          example: 0xeirne38y37h47h454j54h84h
-        date:
-          description: 거래가 이루어진 날짜
-          minLength: 1
-          type: date-time
-        succeeded:
-          description: 성공 여부 (0 이면 실패, 1 이면 성공한 거래, -1이면 pending중인 거래)
-          type: integer
-          minLength: 1
-          example: 1
+  Comment:
+    type: object
+    properties:
+      id: 
+        description: 코멘트 ID
+        type: integer
+      postId:
+        description: 포스트 ID
+        type: integer
+      user:
+        description: 사용자 정보
+        type: object
+        properties:
+          userId:
+            description: 댓글 단 사용자 ID
+            type: integer
+          name:
+            description: 사용자 이름
+            type: string
+          profile:
+            description: 사용자 사진
+            type: string
+      content:
+        description: 댓글 내용
+        type: string
+      createdAt:
+        description: 날짜
+        type: string
+        example: '2017-03-21 12:23:31'
+  Comments:
+    type: object
+    itmes: 
+      $ref: '#/definitions/Comment'
+  Posting:
+    allOf:
+      - $ref: '#/definitions/NewPosting'
+      - type: object
+        properties:
+          id:
+            description: 포스팅 ID
+            type: integer
+            format: int64
+          comments:
+            description: 댓글들
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+          createdAt:
+            description: 날짜
+            type: string
+            example: '2017-03-21 12:23:31'
+  UserSearchResult:
+    type: object
+    properties:
+      id:
+        description: 사용자 index ID
+        type: integer
+      email:
+        description: 사용자 아이디
+        type: string
+        example: cailhuiris@finotek.co.kr
+      name: 
+        description: 사용자 이름
+        type: string
+        example: David Lee
+      introduction:
+        description: 소개글
+        type: string
+        example: 안녕하세요. 개발자 이도현 입니다.
+      picture:
+        description: 프로필 사진
+        type: string
+  QNA:
+    type: object
+    properties:
+      qnaId: 
+        description: 질의응답 ID
+        type: integer
+      user:
+        description: 질문자
+        $ref: '#/definitions/UserSearchResult'
+      replier: 
+        description: 응답자
+        $ref: '#/definitions/UserSearchResult'
+      question:
+        description: 질문 내용
+        type: string
+      answer:
+        description: 답변 내용
+        type: string
+      closed:
+        description: 답변 여부
+        type: boolean
+      createdAt:
+        description: 질문 날짜
+        type: date-time
+      closedAt:
+        description: 답변 날짜
+        type: date-time
+  FAQ:
+    type: object
+    properties:
+      faqId: 
+        description: FAQ ID
+        type: integer
+      title:
+        description: 제목
+        type: string
+      question: 
+        description: 질문
+        type: string
+      answer:
+        description: 답변 내용
+        type: string
+      createdAt:
+        description: 생성 일자
+        type: date-time
+  Policy:
+    type: object
+    properties:
+      policyId: 
+        description: 정책 ID
+        type: integer
+      name:
+        description: 정책 이름
+        type: string
+      content: 
+        description: 정책 내용
+        type: string
