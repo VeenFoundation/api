@@ -70,7 +70,7 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: access-token
+          name: session-id
           description: 사용자 세션 토쿤
           required: true
           type: string
@@ -83,17 +83,17 @@ paths:
           description: 세션 토큰이 유효하지 않을 빼 발생
         '500':
           description: 얘기치 못한 서버 에러 시 발생
-  # 사용자 수정
+  # 사용자 정보 수정
     put:
       tags:
         - user
-      summary: 사용자 수정
+      summary: 사용자 정보 수정
       operationId: updateUser
       produces:
         - application/json
       parameters:
         - in: header
-          name: access-token
+          name: session-id
           description: 사용자 세션 토쿤
           required: true
           type: string
@@ -125,7 +125,7 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: access-token
+          name: session-id
           description: 사용자 세션 토큰
           required: true
           type: string
@@ -146,6 +146,61 @@ paths:
           description: 세션 토큰이 유효하지 않을 빼 발생
         '500': 
           description: 업로드에 실패했을 때 발생합니다.
+  # 앱 키 등록
+  /user/appkey:
+    put:
+      tags:
+        - user
+      summary: app key 값 등록하기
+      operationId: registerAppKey
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: session-id
+          description: 사용자 세션 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 기기로 푸시하기 위한 앱 키 등록
+          required: true
+          schema:
+            $ref: '#/definitions/AppKey'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 토큰이 유효하지 않을 빼 발생
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  /wallet/send:
+    post:
+      tags:
+        - wallet
+      summary: Veen 송금하기
+      operationId: sendTransaction
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: session-id
+          description: 사용자 세션 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 송금 주소, 금액 등
+          required: true
+          schema:
+            $ref: '#/definitions/SendTransaction'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: 세션 토큰이 유효하지 않을 빼 발생
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
   # 지갑 입출금 내역 조회
   /wallet/transactions:
     get:
@@ -157,7 +212,7 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: access-token
+          name: session-id
           description: 사용자 세션 토큰
           required: true
           type: string
@@ -166,6 +221,35 @@ paths:
           description: Successful Operation
           schema:
             $ref: '#/definitions/Transactions'
+        '401':
+          description: 세션 토큰이 유효하지 않을 빼 발생
+        '500': 
+          description: 서버 에러
+  # 지갑 주소 검색
+  /wallet/search?keyword=:
+    get:
+      tags:
+        - wallet
+      summary: 지갑주소 검색
+      operationId: searchWalletAddress
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: keyword
+          description: 검색 키워드
+          required: true
+          type: string
+        - in: header
+          name: filter-by
+          description: 검색 조건 지정하기
+          required: true
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/WalletAddressSearchResult'
         '401':
           description: 세션 토큰이 유효하지 않을 빼 발생
         '500': 
@@ -181,7 +265,7 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: access-token
+          name: session-id
           description: 사용자 세션 토큰
           required: true
           type: string
@@ -228,6 +312,13 @@ definitions:
   Id:
     type: integer
     format: int64
+  AppKey:
+    type: object
+    properties:
+      appKey:
+        descripion: App Key 값
+        type: string
+        minLength: 1
   CreateUser:
     type: object
     properties:
@@ -248,7 +339,7 @@ definitions:
         minLength: 8
         pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
         example: drowssaP123!
-      address:
+      walletAddress:
         description: 사용자의 지갑 주소
         type: string
         minLength: 1
@@ -271,6 +362,17 @@ definitions:
         type: string
         minLength: 4
         example: David Lee
+      introduction:
+        description: 사용자 소개글
+        type: string
+      birth:
+        description: 생년/월일
+        type: string
+        example: 1993/12/03
+      gender:
+        description: 성별
+        type: string
+        example: m/f
   UserProfileUpload:
     type: object
     properties:
@@ -311,6 +413,9 @@ definitions:
   Location:
     type: object
     properties:
+      userId:
+        description: 사용자 아이디
+        type: integer
       latitude:
         description: 위도
         type: float
@@ -367,3 +472,41 @@ definitions:
           type: integer
           minLength: 1
           example: 1
+  SendTransaction:
+    type: object
+    properties:
+      toAddress:
+        description: 받는 이 주소
+        type: string
+        minLength: 1
+      amount:
+        description: Veen 금액
+        type: integer
+        minLength: 1
+      publicKey:
+        description: 트랜잭션 서명 공개 키
+        type: string
+        minLength: 1
+      signature:
+        description: 트랜잭션 서명
+        type: string
+        minLength: 1
+  WalletAddressSearchResult:
+    type: object
+    properties:
+      email:
+        description: 받는이 이메일 주소
+        type: string
+        minLength: 1
+      name:
+        description: 받는이 이름
+        type: string
+        minLength: 1
+      profile:
+        description: 받는이 프로필 사진
+        type: string
+        minLength: 1
+      walletAddress:
+        description: 받는이 지갑 주소
+        type: string
+        minLength: 1
