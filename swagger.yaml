@@ -463,6 +463,14 @@ definitions:
           type: string
           minLength: 1
           example: 0xeirne38y37h47h454j54h84h
+        sender:
+          description: 보낸 이 이름
+          type: string
+          minLength: 1
+        receiver:
+          description: 받은 이 이름
+          type: string
+          minLength: 1
         date:
           description: 거래가 이루어진 날짜
           minLength: 1
