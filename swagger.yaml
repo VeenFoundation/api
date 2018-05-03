@@ -321,6 +321,18 @@ definitions:
         type: float
         minLength: 1
         example: 126.97794509999994
+      publicKey:
+        description: 공개 키
+        type: string
+        minLength: 1
+      timestamp:
+        description: 트랜잭션 시간
+        type: date-time
+        minLength: 1
+      signature:
+        description: 트랜잭션 서명
+        type: string
+        minLength: 1
   Transactions:
     type: array
     items:
