@@ -33,6 +33,41 @@ x-servers:
   - url: //test.liveen.io/v1
     description: Test Server
 paths:
+  # 베타 인증
+  /user/verify/beta:
+    post:
+      tags:
+        - user
+      summary: 베타 테스터 인증
+      description: 사용자가 지급 받은 QR코드로 베타 테스터를 인증하는 프로세스
+      operationId: verifyBetaTest
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Beta Test Verification
+          required: true
+          schema:
+            $ref: '#/definitions/VerifyBetaTester'
+      responses:
+        default:
+          description: Successful Operation
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '409':
+          description: 이미 인증된 QR코드일 때 발생하는 에러
   # 사용자 가입
   /user:
     post:
@@ -44,6 +79,11 @@ paths:
       produces:
         - application/json
       parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
         - in: body
           name: body
           description: Create user object
@@ -57,10 +97,13 @@ paths:
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
             $ref: '#/definitions/FormError'
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
         '409':
           description: 중복된 이메일로 가입을 요청했을 때 발생합니다.
-  '/user/{id}':
-  # 사용자 정보 조회
+    # 사용자 정보 조회
     get:
       tags:
         - user
@@ -70,7 +113,12 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: session-id
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
           description: 사용자 세션 토쿤
           required: true
           type: string
@@ -80,7 +128,9 @@ paths:
           schema:
             $ref: '#/definitions/User'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 사용자 정보 수정
@@ -93,7 +143,12 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: session-id
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
           description: 사용자 세션 토쿤
           required: true
           type: string
@@ -111,7 +166,77 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  # 이메일 인증
+  /user/validate:
+    post:
+      tags:
+        - user
+      summary: 이메일 인증
+      description: 회원가입 이후 이메일로 전송된 인증번호를 입력해야 회원가입이 완료된다.
+      operationId: validateEmail
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Validate E-Mail
+          required: true
+          schema:
+            $ref: '#/definitions/ValidateEmail'
+      responses:
+        default:
+          description: Successful Operation
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+  # 지갑 등록
+  /user/add/wallet:
+    post:
+      tags:
+        - user
+      summary: 지갑 주소 등록하기
+      operationId: registerWalletAddress
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 기기로 푸시하기 위한 앱 키 등록
+          required: true
+          schema:
+            $ref: '#/definitions/ApplyWallet'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 프로필 사진 업로드
@@ -119,14 +244,19 @@ paths:
     post:
       tags:
         - user
-      summary: 프로필 사진 추가
+      summary: 프로필 사진 업로드
       operationId: uploadProfileImage
       produces:
         - application/json
       parameters:
         - in: header
-          name: session-id
-          description: 사용자 세션 토큰
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
           required: true
           type: string
         - in: body
@@ -143,22 +273,24 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
         '500': 
           description: 업로드에 실패했을 때 발생합니다.
-  # 앱 키 등록
-  /user/appkey:
-    put:
+  # 로그인
+  /user/login:
+    post:
       tags:
         - user
-      summary: app key 값 등록하기
-      operationId: registerAppKey
+      summary: 로그인
+      operationId: login
       produces:
         - application/json
       parameters:
         - in: header
-          name: session-id
-          description: 사용자 세션 토큰
+          name: api-key
+          description: API에 접근할 수 있는 키
           required: true
           type: string
         - in: body
@@ -166,39 +298,159 @@ paths:
           description: 기기로 푸시하기 위한 앱 키 등록
           required: true
           schema:
-            $ref: '#/definitions/AppKey'
+            $ref: '#/definitions/Login'
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/LoginResult'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 아이디와 비밀번호가 일치하지 않을 때 발생한다.
+        '423':
+          description: 회원정보는 존재하나 이메일 인증은 거치지 않은경우에 인증번호를 요청할 수 있는 임시 토큰이 발급된다.
+          schema:
+            $ref: '#/definitions/TempToken'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
-  /wallet/send:
+  # 인증메일 요청
+  /user/request_auth_code:
     post:
       tags:
-        - wallet
-      summary: Veen 송금하기
-      operationId: sendTransaction
+        - user
+      summary: 인증 메일 재전송
+      operationId: requestAuthCode
       produces:
         - application/json
       parameters:
         - in: header
-          name: session-id
-          description: 사용자 세션 토큰
+          name: api-key
+          description: API에 접근할 수 있는 키
           required: true
           type: string
         - in: body
           name: body
-          description: 송금 주소, 금액 등
+          description: 인증 코드를 재전송하기 위한 3분짜리 토큰 전송
           required: true
           schema:
-            $ref: '#/definitions/SendTransaction'
+            $ref: '#/definitions/RequestAuthCode'
       responses:
         default:
           description: Successful Operation
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 일치하는 토큰이 존재하지 않을 때 발생한다.
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  # 비밀번호 변경
+  /user/change_password:
+    put:
+      tags:
+        - user
+      summary: 비밀번호 변경
+      operationId: login
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 예전 비밀번호와 현재 비밀번호
+          required: true
+          schema:
+            $ref: '#/definitions/ChangePassword'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 기존 비밀번호가 일치하지 않은 경우 발생한다.
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  # 비밀번호 찾기
+  /user/find_password_1:
+    post:
+      tags:
+        - user
+      summary: 비밀번호 찾기
+      description: 
+        비밀번호 찾기 요청을 하면 인증번호가 입력한 이메일로 전송된다. 
+        이 인증번호를 다음단계에서 입력해야만 임시비밀번호가 발급된다.
+        발급받은 인증번호는 3분간만 유효하다.
+      operationId: findPassword
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 찾을 비밀번호 아이디
+          required: true
+          schema:
+            $ref: '#/definitions/FindPassword'
+      responses:
+        default:
+          description: Successful Operation
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 입력한 이메일이 존재하지 않을 때 발생한다.
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  /user/find_password_2:
+    post:
+      tags:
+        - user
+      summary: 비밀번호 찾기 2단계
+      description: 이전 단계에서 이메일로 발급받은 인증번호를 인증하여 임시비밀번호를 발급받는 단계이다.
+      operationId: findPassword2
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 인증번호 입력
+          required: true
+          schema:
+            $ref: '#/definitions/AuthCode'
+      responses:
+        default:
+          description: 임시 비밀번호가 이메일을 통하여 발급된다.
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 인증번호가 일치하지 않을 때 발생한다.
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 지갑 입출금 내역 조회
@@ -212,8 +464,13 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: session-id
-          description: 사용자 세션 토큰
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
           required: true
           type: string
       responses:
@@ -222,36 +479,9 @@ paths:
           schema:
             $ref: '#/definitions/Transactions'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
-        '500': 
-          description: 서버 에러
-  # 지갑 주소 검색
-  /wallet/search?keyword=:
-    get:
-      tags:
-        - wallet
-      summary: 지갑주소 검색
-      operationId: searchWalletAddress
-      produces:
-        - application/json
-      parameters:
-        - in: query
-          name: keyword
-          description: 검색 키워드
-          required: true
-          type: string
-        - in: header
-          name: filter-by
-          description: 검색 조건 지정하기
-          required: true
-          type: string
-      responses:
-        default:
-          description: Successful Operation
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/WalletAddressSearchResult'
-        '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+            $ref: '#/definitions/Unauthorized'
         '500': 
           description: 서버 에러
   # 위치 정보 업로드
@@ -265,8 +495,13 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: session-id
-          description: 사용자 세션 토큰
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
           required: true
           type: string
         - in: body
@@ -274,7 +509,7 @@ paths:
           description: 위치 정보.
           required: true
           schema:
-            $ref: '#/definitions/Location'
+            $ref: '#/definitions/UploadLocation'
       responses:
         default:
           description: Successful Operation
@@ -283,19 +518,101 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: 세션 토큰이 유효하지 않을 빼 발생
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '500': 
+          description: 업로드에 실패했을 때 발생합니다.
+  /location/nearby:
+    get:
+      tags:
+        - location
+      summary: 현재 위치 주변검색
+      operationId: searchNearby
+      description: 현재 주어진 위도 경도 주변에서 내 동선정보를 가져온다.
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: query
+          name: lat
+          description: 위도
+          required: true
+        - in: query
+          name: lng
+          description: 경도
+          required: true
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/Location'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '500': 
+          description: 업로드에 실패했을 때 발생합니다.
+  /location/behavior:
+    put:
+      tags:
+        - location
+      summary: 기존 위치에 행동 기록하기
+      operationId: searchNearby
+      description: 10분마다 수집한 위치에다가 특정 행동을 기록한다. (의료, 쇼핑, 식사 등등)
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          description: API에 접근할 수 있는 키
+          required: true
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Beta Test Verification
+          required: true
+          schema:
+            $ref: '#/definitions/AddBehaviorToLocation'
+      responses:
+        default:
+          description: Successful Operation
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 일치하는 locationId가 내것이 아니거나 존재하지 않을 때
         '500': 
           description: 업로드에 실패했을 때 발생합니다.
 definitions:
   ErrorField:
     type: object
     properties:
-      source:
-        description: '에러가 발생한 소스'
-        type: string
-        example: 'userId'
-      message:
-        description: '에러 메시지'
+      userId:
+        description: '키에는 에러가 발생한 소스 값이 들어가고 내용에는 에러 메시지를 보여줍니다.'
         type: string
         example: '아이디 입력값은 반드시 입력해야 합니다.'
   FormError:
@@ -312,11 +629,29 @@ definitions:
   Id:
     type: integer
     format: int64
-  AppKey:
+  ApplyWallet:
     type: object
     properties:
+      walletAddress:
+        descripion: 지갑 주소 값
+        type: string
+        minLength: 1
+  VerifyBetaTester:
+    type: object
+    properties:
+      ticket:
+        description: QR코드 프라이빗키를 해싱한 값
+        type: string
+        minLength: 1
+  ValidateEmail:
+    type: object
+    properties:
+      authCode:
+        description: 이메일로 전송된 인증번호
+        type: string
+        minLength: 1
       appKey:
-        descripion: App Key 값
+        descripion: 푸시 전송을 위한 기기 APP KEY 값을 등록한다.
         type: string
         minLength: 1
   CreateUser:
@@ -333,22 +668,11 @@ definitions:
         minLength: 1
         example: cailhuiris@finotek.co.kr
       password:
-        description: '사용자 비밀번호 8자리 이상 16자리 이하의 영문 대소문자, 숫자, 특수문자 조합으로서 적어도 하나의 특수문자는 포함해야한다.'
+        description: '사용자 비밀번호'
         type: string
         format: password
-        minLength: 8
-        pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
-        example: drowssaP123!
-      walletAddress:
-        description: 사용자의 지갑 주소
-        type: string
-        minLength: 1
-        example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608e2B6a123n
-      publicKey:
-        description: 사용자의 공개 키
-        type: string
-        minLength: 1
-        example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608123h81h38
+        minLength: 7
+        example: fino1838tek!!@#$
   UpdateUser:
     type: object
     properties:
@@ -405,12 +729,85 @@ definitions:
         description: 프로필 사진 URL
         type: string
         example: https://s3-aws.amazon.com/reahrkahr/weqhehuih/profile.png
-      address:
+      walletAddress:
         description: 사용자의 지갑 주소
         type: string
         minLength: 1
         example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608e2B6a123n
-  Location:
+      introduction:
+        description: 사용자 소개글
+        type: string
+      birth:
+        description: 생년/월일
+        type: string
+        example: 1993/12/03
+      gender:
+        description: 성별
+        type: string
+        example: m/f
+  Login:
+    type: object
+    properties:
+      email:
+        description: 사용자 이메일
+        type: string
+        example: cailhuiris@finotek.co.kr
+      password:
+        description: 비밀번호
+        type: string
+        example: 128h83hFinotekn12bu!!
+  LoginResult:
+    type: object
+    properties:
+      accessToken:
+        description: 사용자 권한 접근 토큰
+        type: string
+        example: ASdni1erahrkhudbqASdjiejirjaks89doihweo
+      expiredAt:
+        description: 토큰 만료 일자
+        type: date-time
+        minLength: 1
+  TempToken:
+    type: object
+    properties:
+      tempToken: 
+        description: 인증 메일 요청을 하기 위한 임시 토큰
+        type: string
+        minLength: 1
+      expiredAt:
+        description: 토큰 만료 일자
+        type: date-time
+        minLength: 1
+  RequestAuthCode:
+    type: object
+    properties:
+      tempToken:
+        description: 인증 메일 요청을 위한 임시 토큰
+        type: string
+        minLength: 1
+  AuthCode:
+    type: object
+    properties:
+      authCode:
+        description: 인증번호
+        type: string
+        minLength: 1
+  ChangePassword:
+    type: object
+    properties: 
+      oldPassword:
+        description: 기존 비밀번호
+        type: string
+      newPassword:
+        description: 새 비밀번호
+        type: string
+  FindPassword:
+    type: object
+    properties:
+      email:
+        description: 비밀번호를 찾을 이메일 주소 값 입력
+        type: string
+  UploadLocation:
     type: object
     properties:
       userId:
@@ -426,18 +823,51 @@ definitions:
         type: float
         minLength: 1
         example: 126.97794509999994
-      publicKey:
-        description: 공개 키
+  Location:
+    type: array
+    items:
+      type: object
+      properties:
+        locationId:
+          description: 위치 ID
+          type: integer
+        userId:
+          description: 사용자 아이디
+          type: integer
+        latitude:
+          description: 위도
+          type: float
+          minLength: 1
+          example: 37.5662952
+        longitude:
+          description: 경도
+          type: float
+          minLength: 1
+          example: 126.97794509999994
+        isCheckIn:
+          description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
+          type: boolean
+          example: true
+        behavior: 
+          description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
+          type: string
+          minLength: 1
+          example: FITN // (운동), SHOP // (쇼핑)
+        createdAt:
+          description: 위치 등일
+          type: date-time
+  AddBehaviorToLocation:
+    type: object
+    properties:
+      locationId:
+        description: 위치 ID
+        type: integer
+        example: 1
+      behavior: 
+        description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
         type: string
         minLength: 1
-      timestamp:
-        description: 트랜잭션 시간
-        type: date-time
-        minLength: 1
-      signature:
-        description: 트랜잭션 서명
-        type: string
-        minLength: 1
+        example: FITN // (운동), SHOP // (쇼핑)
   Transactions:
     type: array
     items:
@@ -499,22 +929,16 @@ definitions:
         description: 트랜잭션 서명
         type: string
         minLength: 1
-  WalletAddressSearchResult:
+  Unauthorized:
     type: object
     properties:
-      email:
-        description: 받는이 이메일 주소
+      source:
+        description: 에러가 발생한 지점
         type: string
         minLength: 1
-      name:
-        description: 받는이 이름
+        example: api_key
+      result:
+        description: 결과 메시지
         type: string
         minLength: 1
-      profile:
-        description: 받는이 프로필 사진
-        type: string
-        minLength: 1
-      walletAddress:
-        description: 받는이 지갑 주소
-        type: string
-        minLength: 1
+        example: Invalid api key.
