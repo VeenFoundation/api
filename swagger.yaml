@@ -546,10 +546,12 @@ paths:
         - in: query
           name: lat
           description: 위도
+          type: string
           required: true
         - in: query
           name: lng
           description: 경도
+          type: string
           required: true
       responses:
         default:
