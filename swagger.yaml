@@ -699,6 +699,10 @@ definitions:
         description: 성별
         type: string
         example: m/f
+      nationality:
+        description: 국적 입력
+        type: string
+        example: ko-KR
   UserProfileUpload:
     type: object
     properties:
@@ -825,6 +829,18 @@ definitions:
         type: float
         minLength: 1
         example: 126.97794509999994
+      timestamp:
+        description:  현재 시간
+        type: integer
+        minLength: 1
+      signature: 
+        description: 정보 서명
+        type: string
+        minLength: 1
+      publicKey:
+        description: 공개 키
+        type: string
+        minLength: 1
   Location:
     type: array
     items:
@@ -861,8 +877,8 @@ definitions:
   AddBehaviorToLocation:
     type: object
     properties:
-      locationId:
-        description: 위치 ID
+      contentId:
+        description: 컨텐츠 ID
         type: integer
         example: 1
       behavior: 
