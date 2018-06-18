@@ -44,11 +44,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: Beta Test Verification
@@ -79,11 +74,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: Create user object
@@ -113,11 +103,6 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
-        - in: header
           name: access-token
           description: 사용자 세션 토쿤
           required: true
@@ -142,11 +127,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 세션 토쿤
@@ -182,11 +162,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: Validate E-Mail
@@ -214,11 +189,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -249,11 +219,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -288,11 +253,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: 기기로 푸시하기 위한 앱 키 등록
@@ -326,11 +286,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: 인증 코드를 재전송하기 위한 3분짜리 토큰 전송
@@ -358,11 +313,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -399,11 +349,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: 찾을 비밀번호 아이디
@@ -431,11 +376,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: body
           name: body
           description: 인증번호 입력
@@ -464,11 +404,6 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
-        - in: header
           name: access-token
           description: 사용자 접근 토큰
           required: true
@@ -494,11 +429,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -533,11 +463,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -578,11 +503,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: api-key
-          description: API에 접근할 수 있는 키
-          required: true
-          type: string
         - in: header
           name: access-token
           description: 사용자 접근 토큰
@@ -829,6 +749,16 @@ definitions:
         type: float
         minLength: 1
         example: 126.97794509999994
+      IsCheckIn:
+        description: 체크인인지 / 자동인지 여부
+        type: integer
+        minLength: 1
+        example: 'C/A (Check-in/Automatic)'
+      behavior: 
+        description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
+        type: string
+        minLength: 1
+        example: FITN // (운동), SHOP // (쇼핑)
       timestamp:
         description:  현재 시간
         type: integer
