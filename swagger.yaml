@@ -788,7 +788,7 @@ definitions:
         minLength: 1
       timeZone:
         type: integer
-        description: 컨텐츠의 시간대(예: +3)
+        description: 컨텐츠의 시간대(예: "+3")
         minLength: 1
   Location:
     type: array
@@ -821,8 +821,11 @@ definitions:
           minLength: 1
           example: FITN // (운동), SHOP // (쇼핑)
         createdAt:
-          description: 위치등록일
+          description: 위치등록일(UTC)
           type: date-time
+        timeZome:
+          description: 시간대
+          type: integer
   AddBehaviorToLocation:
     type: object
     properties:
