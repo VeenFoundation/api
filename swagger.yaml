@@ -526,13 +526,13 @@ definitions:
     type: object
     properties:
       walletAddress:
-        descripion: 지갑 주소 값
+        description: 지갑 주소 값
         type: string
         minLength: 1
       publicKey:
         description: 지갑의 공개키
         type: string
-        minLength: 5
+        minLength: 1
   VerifyBetaTester:
     type: object
     properties:
