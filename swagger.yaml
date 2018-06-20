@@ -761,6 +761,7 @@ definitions:
         minLength: 1
       locationString:
         description: userId, latitude, longitude, timestamp의 json string
+        type: string
         minLength: 1
       locationSignature:
         description: locatoinString의 서명
