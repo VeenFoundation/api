@@ -391,7 +391,7 @@ paths:
         '500':
           description: 서버 에러
   # 위치 정보 업로드
-  /location:
+  /content:
     post:
       tags:
         - location
@@ -424,7 +424,7 @@ paths:
             $ref: '#/definitions/Unauthorized'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
-  /location/nearby:
+  /content/nearby:
     get:
       tags:
         - location
@@ -449,6 +449,16 @@ paths:
           description: 경도
           type: string
           required: true
+        - in: query
+          name: from
+          description: 콘텐츠 조회 시작 시간(UTC)
+          required: true
+          type: string
+        - in: query
+          name: until
+          description: 콘텐츠 조회 종료 시간(UTC)
+          required: true
+          type: string
       responses:
         default:
           description: Successful Operation
@@ -464,7 +474,7 @@ paths:
             $ref: '#/definitions/Unauthorized'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
-  /location/behavior:
+  /content/behavior:
     put:
       tags:
         - location
@@ -753,7 +763,6 @@ definitions:
       behavior:
         description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
         type: string
-        minLength: 1
         example: FITN // (운동), SHOP // (쇼핑)
       timestamp:
         description:  현재 시간(UTC)
@@ -776,6 +785,10 @@ definitions:
       publicKey:
         description: 공개 키
         type: string
+        minLength: 1
+      timeZone:
+        type: integer
+        description: 컨텐츠의 시간대(예: +3)
         minLength: 1
   Location:
     type: array
