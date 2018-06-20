@@ -379,6 +379,19 @@ paths:
           description: 사용자 접근 토큰
           required: true
           type: string
+        - in: header
+          name: filter
+          description: all, sent, received or reward
+          type: string
+          required: all
+        - in: header
+          name: from
+          type: string
+          description: 시간 조회 조건(UTC)
+        - in: header
+          name: until
+          type: string
+          description: 시간 조회 조건(UTC)
       responses:
         default:
           description: Successful Operation
