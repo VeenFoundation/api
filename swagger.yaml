@@ -79,7 +79,7 @@ paths:
           descroption: Verify Promotion Code
           required: true
           schema:
-            $ref: '#/definitions/VerifyPRomotion'
+            $ref: '#/definitions/VerifyPromotion'
       responses:
         default:
           description: Successful Operation
