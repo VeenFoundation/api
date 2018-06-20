@@ -755,7 +755,7 @@ definitions:
         type: float
         minLength: 1
         example: 126.97794509999994
-      IsCheckIn:
+      isCheckIn:
         description: 체크인인지 / 자동인지 여부
         type: integer
         minLength: 1
@@ -823,7 +823,7 @@ definitions:
         createdAt:
           description: 위치등록일(UTC)
           type: date-time
-        timeZome:
+        timeZone:
           description: 시간대
           type: integer
   AddBehaviorToLocation:
