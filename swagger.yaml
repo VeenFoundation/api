@@ -76,7 +76,7 @@ paths:
       parameters:
         - in: body
           name: body
-          descroption: Verify Promotion Code
+          description: Promotion Verification
           required: true
           schema:
             $ref: '#/definitions/VerifyPromotion'
@@ -132,7 +132,7 @@ paths:
       parameters:
         - in: header
           name: access-token
-          description: 사용자 세션 토쿤
+          description: 사용자 세션 토큰
           required: true
           type: string
       responses:
@@ -593,13 +593,14 @@ definitions:
         description: QR코드 프라이빗키를 해싱한 값
         type: string
         minLength: 1
-  verifyPromotion:
-    type: object:
+  VerifyPromotion:
+    type: object
     properties:
       promotionCode:
         description: 프로모션 코드
         type: string
         minLength: 1
+        emample: a123456789
   ValidateEmail:
     type: object
     properties:
@@ -629,7 +630,12 @@ definitions:
         type: string
         format: password
         minLength: 7
-        example: fino1838tek!!@#$
+        example: fino1838tek!!@#
+      promotionCode:
+        description: 프로모션 코드
+        type: string
+        minLength: 4
+        example: a123456789
   UpdateUser:
     type: object
     properties:
@@ -706,6 +712,14 @@ definitions:
         description: 성별
         type: string
         example: m/f
+      promotionCode:
+        description: 프로모션 코드
+        type: string
+        example: a123456789
+      active:
+        description: 이메일 인증 여부
+        type: string
+        example : 1
   Login:
     type: object
     properties:
