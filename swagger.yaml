@@ -363,64 +363,7 @@ paths:
           description: 기존 비밀번호가 일치하지 않은 경우 발생한다.
         '500':
           description: 얘기치 못한 서버 에러 시 발생
-  # 비밀번호 찾기
-  /user/find_password_1:
-    post:
-      tags:
-        - user
-      summary: 비밀번호 찾기
-      description:
-        비밀번호 찾기 요청을 하면 인증번호가 입력한 이메일로 전송된다.
-        이 인증번호를 다음단계에서 입력해야만 임시비밀번호가 발급된다.
-        발급받은 인증번호는 3분간만 유효하다.
-      operationId: findPassword
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: 찾을 비밀번호 아이디
-          required: true
-          schema:
-            $ref: '#/definitions/FindPassword'
-      responses:
-        default:
-          description: Successful Operation
-        '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
-        '404':
-          description: 입력한 이메일이 존재하지 않을 때 발생한다.
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
-  /user/find_password_2:
-    post:
-      tags:
-        - user
-      summary: 비밀번호 찾기 2단계
-      description: 이전 단계에서 이메일로 발급받은 인증번호를 인증하여 임시비밀번호를 발급받는 단계이다.
-      operationId: findPassword2
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: 인증번호 입력
-          required: true
-          schema:
-            $ref: '#/definitions/AuthCode'
-      responses:
-        default:
-          description: 임시 비밀번호가 이메일을 통하여 발급된다.
-        '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
-        '404':
-          description: 인증번호가 일치하지 않을 때 발생한다.
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
+
   # 지갑 입출금 내역 조회
   /wallet/transactions:
     get:
@@ -586,6 +529,10 @@ definitions:
         descripion: 지갑 주소 값
         type: string
         minLength: 1
+      publicKey:
+        description: 지갑의 공개키
+        type: string
+        minLength: 5
   VerifyBetaTester:
     type: object
     properties:
@@ -716,7 +663,7 @@ definitions:
         description: 프로모션 코드
         type: string
         example: a123456789
-      active:
+      isActive:
         description: 이메일 인증 여부
         type: string
         example : 1
@@ -809,13 +756,22 @@ definitions:
         minLength: 1
         example: FITN // (운동), SHOP // (쇼핑)
       timestamp:
-        description:  현재 시간
+        description:  현재 시간(UTC)
         type: integer
         minLength: 1
-      signature:
-        description: 정보 서명
+      locationString:
+        description: userId, latitude, longitude, timestamp의 json string
+        minLength: 1
+      locationSignature:
+        description: locatoinString의 서명
         type: string
         minLength: 1
+      behaviorString:
+        description: userId, behavior, timestamp의 json string
+        type: string
+      behaviorSignature:
+        description: behaviorString의 서명
+        type: string
       publicKey:
         description: 공개 키
         type: string
@@ -851,7 +807,7 @@ definitions:
           minLength: 1
           example: FITN // (운동), SHOP // (쇼핑)
         createdAt:
-          description: 위치 등일
+          description: 위치등록일
           type: date-time
   AddBehaviorToLocation:
     type: object
@@ -865,6 +821,22 @@ definitions:
         type: string
         minLength: 1
         example: FITN // (운동), SHOP // (쇼핑)
+      behaviorString:
+        description: userId, behavior, timestamp의 json string
+        type: string
+        minLength: 1
+      timestamp:
+        description:  현재 시간(UTC)
+        type: integer
+        minLength: 1
+      signature:
+        description: behaviorString의 서명
+        type: string
+        minLength: 1
+      publicKey:
+        description: 공개 키
+        type: string
+        minLength: 1
   Transactions:
     type: array
     items:
