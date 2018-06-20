@@ -788,7 +788,7 @@ definitions:
         minLength: 1
       timeZone:
         type: integer
-        description: 컨텐츠의 시간대(예: "+3")
+        description: 컨텐츠의 시간대
         minLength: 1
   Location:
     type: array
