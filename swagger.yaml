@@ -17,15 +17,15 @@ info:
 tags:
   - name: user
     description: 사용자 기능
-  - name: location
-    description: 위치 저장 기능
+  - name: content
+    description: 컨텐츠 및 위치 저장 기능
   - name: wallet
     description: 지갑 기능
 x-tagGroups:
   - name: Fundamental Logic
     tags:
       - user
-      - location
+      - content
       - wallet
 x-servers:
   - url: //api.liveen.io/v1
@@ -394,7 +394,7 @@ paths:
   /content:
     post:
       tags:
-        - location
+        - content
       summary: 위치 정보 업로드
       operationId: uploadLocation
       produces:
@@ -427,7 +427,7 @@ paths:
   /content/nearby:
     get:
       tags:
-        - location
+        - content
       summary: 현재 위치 주변검색
       operationId: searchNearby
       description: 현재 주어진 위도 경도 주변에서 내 동선정보를 가져온다.
@@ -463,7 +463,7 @@ paths:
         default:
           description: Successful Operation
           schema:
-            $ref: '#/definitions/Location'
+            $ref: '#/definitions/Content'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -477,7 +477,7 @@ paths:
   /content/behavior:
     put:
       tags:
-        - location
+        - content
       summary: 기존 위치에 행동 기록하기
       operationId: searchNearby
       description: 10분마다 수집한 위치에다가 특정 행동을 기록한다. (의료, 쇼핑, 식사 등등)
@@ -790,13 +790,13 @@ definitions:
         type: integer
         description: 컨텐츠의 시간대
         minLength: 1
-  Location:
+  Content:
     type: array
     items:
       type: object
       properties:
-        locationId:
-          description: 위치 ID
+        contentId:
+          description: 컨텐츠 ID
           type: integer
         userId:
           description: 사용자 아이디
