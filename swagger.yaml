@@ -207,7 +207,7 @@ paths:
             $ref: '#/definitions/Unauthorized'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
-  # 프로필 사진 업로드
+  # 드
   /user/profile:
     post:
       tags:
@@ -620,10 +620,6 @@ definitions:
   UserProfileUpload:
     type: object
     properties:
-      userId:
-        descrition: 업로드하려는 사용자의 아이디
-        type: integer
-        example: 1
       imageUrl:
         description: 업로드 된 프로필 사진 URL, 해당 필드가 주어지지 않은 경우엔 default 사진을 보여준다.
         type: string
