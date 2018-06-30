@@ -576,6 +576,19 @@ definitions:
         type: string
         minLength: 4
         example: a123456789
+      os:
+        description: OS 정보
+        type: string
+        minLength: 1
+      model:
+        description: 기기 모델명
+        type: string
+        minLength: 1
+      appKey:
+        description: Liveen app key
+        type: string
+        minLength: 1
+
   UpdateUser:
     type: object
     properties:
@@ -671,6 +684,18 @@ definitions:
         description: 비밀번호
         type: string
         example: 128h83hFinotekn12bu!!
+      os:
+        description: OS 정보
+        type: string
+        minLength: 1
+      model:
+        description: 기기 모델명
+        type: string
+        minLength: 1
+      appKey:
+        description: Liveen app key
+        type: string
+        minLength: 1
   LoginResult:
     type: object
     properties:
