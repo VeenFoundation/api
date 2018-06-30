@@ -33,42 +33,12 @@ x-servers:
   - url: //test.liveen.io/v1
     description: Test Server
 paths:
-  # 베타 인증
-  /user/verify/beta:
-    post:
-      tags:
-        - user
-      summary: 베타 테스터 인증
-      description: 사용자가 지급 받은 QR코드로 베타 테스터를 인증하는 프로세스
-      operationId: verifyBetaTest
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Beta Test Verification
-          required: true
-          schema:
-            $ref: '#/definitions/VerifyBetaTester'
-      responses:
-        default:
-          description: Successful Operation
-        '400':
-          description: 입력값의 형식이 틀렸을 때 발생
-          schema:
-            $ref: '#/definitions/FormError'
-        '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
-        '409':
-          description: 이미 인증된 QR코드일 때 발생하는 에러
-  # 프로모션
+  # 프로모션 인증
   /user/verify/promotion:
     post:
       tags:
         - user
-      summary: 베타 테스트 프로모션 코드 등록
+      summary: 베타 테스트 프로모션 코드 또는 QR코드가 유효한것인지 아닌 것인지 검증한다ㅣ
       description: 관리자에 의해 기간별 프로모션 코드를 검증
       operationId: verifyPromotion
       produces:
@@ -88,9 +58,9 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
+          description: 유효한 프로모션 코드 혹은 QR코드가 아닌 경우 발생한다.
+        '403':
+          description: 프로모션을 사용할 수 있는 기간이 아닌경우 발생한다.
   # 사용자 가입
   /user:
     post:
@@ -116,9 +86,9 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
+          description: 등록된 프로모션 코드 or QR코드값이 아닌경우 발생한다.
+        '403':
+          description: 프로모션을 사용할 수 있는 기간이 아닌경우 발생한다.
         '409':
           description: 중복된 이메일로 가입을 요청했을 때 발생합니다.
     # 사용자 정보 조회
