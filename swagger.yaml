@@ -111,7 +111,7 @@ paths:
           schema:
             $ref: '#/definitions/User'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -144,7 +144,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -174,7 +174,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
   # 지갑 등록
@@ -202,7 +202,7 @@ paths:
         default:
           description: Successful Operation
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -236,7 +236,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -262,10 +262,6 @@ paths:
           description: Successful Operation
           schema:
             $ref: '#/definitions/LoginResult'
-        '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
         '404':
           description: 아이디와 비밀번호가 일치하지 않을 때 발생한다.
         '423':
@@ -294,7 +290,7 @@ paths:
         default:
           description: Successful Operation
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '404':
@@ -326,7 +322,7 @@ paths:
         default:
           description: Successful Operation
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '404':
@@ -368,7 +364,7 @@ paths:
           schema:
             $ref: '#/definitions/Transactions'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -402,7 +398,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -452,7 +448,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
@@ -486,7 +482,7 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: API키 혹은 토큰이 유효하지 않을 때 발생한다.
+          description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '404':
@@ -592,11 +588,6 @@ definitions:
   UpdateUser:
     type: object
     properties:
-      userId:
-        description: 사용자 아이디
-        type: integer
-        minLength: 1
-        example: 1
       name:
         description: 사용자 이름
         type: string
