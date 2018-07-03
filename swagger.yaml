@@ -679,10 +679,6 @@ definitions:
         description: 기기 모델명
         type: string
         minLength: 1
-      appKey:
-        description: Liveen app key
-        type: string
-        minLength: 1
   LoginResult:
     type: object
     properties:
