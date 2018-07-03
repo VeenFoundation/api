@@ -253,7 +253,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: 기기로 푸시하기 위한 앱 키 등록
+          description: 로그인
           required: true
           schema:
             $ref: '#/definitions/Login'
@@ -268,6 +268,34 @@ paths:
           description: 회원정보는 존재하나 이메일 인증은 거치지 않은경우에 인증번호를 요청할 수 있는 임시 토큰이 발급된다.
           schema:
             $ref: '#/definitions/TempToken'
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+  # 로그아웃
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: 로그아웃
+      operationId: logout
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 로그아웃 / 해당 토큰을 지우는 과정입니다.
+          required: true
+          schema:
+            $ref: '#/definitions/Logout'
+      responses:
+        default:
+          description: Successful Operation
+        '400':
+          description: 헤더로 엑세스 토큰이 전달되지 않았을 때 발생하는 에러입니다.
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 인증메일 요청
