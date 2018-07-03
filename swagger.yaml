@@ -288,8 +288,6 @@ paths:
           name: body
           description: 로그아웃 / 해당 토큰을 지우는 과정입니다.
           required: true
-          schema:
-            $ref: '#/definitions/Logout'
       responses:
         default:
           description: Successful Operation
