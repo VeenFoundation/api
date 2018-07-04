@@ -296,7 +296,7 @@ paths:
     post:
       tags:
         - user
-      summary: 인증 메일 재전송
+      summary: 인증 메일 송
       operationId: requestAuthCode
       produces:
         - application/json
@@ -565,10 +565,6 @@ definitions:
         description: 이메일로 전송된 인증번호
         type: string
         minLength: 1
-      appKey:
-        descripion: 푸시 전송을 위한 기기 APP KEY 값을 등록한다.
-        type: string
-        minLength: 1
   CreateUser:
     type: object
     properties:
@@ -725,8 +721,12 @@ definitions:
   RequestAuthCode:
     type: object
     properties:
-      tempToken:
-        description: 인증 메일 요청을 위한 임시 토큰
+      email:
+        description: 사용자 이메일
+        type: string
+        minLength: 1
+      password:
+        description: 사용자 비밀번호
         type: string
         minLength: 1
   AuthCode:
