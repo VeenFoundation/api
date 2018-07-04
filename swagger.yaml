@@ -296,7 +296,7 @@ paths:
     post:
       tags:
         - user
-      summary: 인증 메일 송
+      summary: 인증 메일 재전송
       operationId: requestAuthCode
       produces:
         - application/json
@@ -310,12 +310,8 @@ paths:
       responses:
         default:
           description: Successful Operation
-        '401':
-          description: 접근토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/Unauthorized'
         '404':
-          description: 일치하는 토큰이 존재하지 않을 때 발생한다.
+          description: 인증 토큰이 유효하지 않을 때 발생한다.
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 비밀번호 변경
