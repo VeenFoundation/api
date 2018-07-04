@@ -565,6 +565,10 @@ definitions:
         description: 이메일로 전송된 인증번호
         type: string
         minLength: 1
+      email:
+        description: 이메일
+        type: string
+        minLength: 1
   CreateUser:
     type: object
     properties:
