@@ -151,13 +151,13 @@ paths:
         '500':
           description: 얘기치 못한 서버 에러 시 발생
   # 이메일 인증
-  /user/validate:
+  /user/activate:
     post:
       tags:
         - user
       summary: 이메일 인증
       description: 회원가입 이후 이메일로 전송된 인증번호를 입력해야 회원가입이 완료된다.
-      operationId: validateEmail
+      operationId: activateEmail
       produces:
         - application/json
       parameters:
@@ -166,7 +166,7 @@ paths:
           description: Validate E-Mail
           required: true
           schema:
-            $ref: '#/definitions/ValidateEmail'
+            $ref: '#/definitions/ActivateEmail'
       responses:
         default:
           description: Successful Operation
@@ -175,9 +175,13 @@ paths:
           schema:
             $ref: '#/definitions/FormError'
         '401':
-          description: 접근토큰이 유효하지 않을 때 발생한다.
+          description: 활성화 토큰이 일치하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
+        '404':
+          description: 사용자 정보를 찾을 수 없을 때 발생한다.
+        '500':
+          description: 서버 에러 발생시 발생한다.
   # 지갑 등록
   /user/add/wallet:
     post:
@@ -554,10 +558,10 @@ definitions:
         type: string
         minLength: 1
         emample: a123456789
-  ValidateEmail:
+  ActivateEmail:
     type: object
     properties:
-      authCode:
+      activationCode:
         description: 이메일로 전송된 인증번호
         type: string
         minLength: 1
@@ -754,9 +758,6 @@ definitions:
   UploadLocation:
     type: object
     properties:
-      userId:
-        description: 사용자 아이디
-        type: integer
       latitude:
         description: 위도
         type: float
@@ -772,10 +773,6 @@ definitions:
         type: integer
         minLength: 1
         example: 'C/A (Check-in/Automatic)'
-      behavior:
-        description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
-        type: string
-        example: FITN // (운동), SHOP // (쇼핑)
       timestamp:
         description:  현재 시간(UTC)
         type: integer
@@ -788,12 +785,6 @@ definitions:
         description: locatoinString의 서명
         type: string
         minLength: 1
-      behaviorString:
-        description: userId, behavior, timestamp의 json string
-        type: string
-      behaviorSignature:
-        description: behaviorString의 서명
-        type: string
       publicKey:
         description: 공개 키
         type: string
