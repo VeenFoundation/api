@@ -38,7 +38,9 @@ paths:
     post:
       tags:
         - user
-      summary: 베타 테스트 프로모션 코드 또는 QR코드가 유효한것인지 아닌 것인지 검증한다ㅣ
+      summary: |
+        베타 테스트 프로모션 코드 또는
+        QR코드가 유효한것인지 아닌 것인지 검증한다
       description: 관리자에 의해 기간별 프로모션 코드를 검증
       operationId: verifyPromotion
       produces:
@@ -60,14 +62,20 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
             $ref: '#/definitions/FormError'
         '401':
           description: 유효한 프로모션 코드 혹은 QR코드가 아닌 경우 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '403':
           description: 프로모션을 사용할 수 있는 기간이 아닌경우 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 사용자 가입
   /user/register:
     post:
@@ -95,16 +103,24 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
             $ref: '#/definitions/FormError'
         '401':
           description: 등록된 프로모션 코드 or QR코드값이 아닌경우 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '403':
           description: 프로모션을 사용할 수 있는 기간이 아닌경우 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '409':
           description: 중복된 이메일로 가입을 요청했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   /user:
     # 사용자 정보 조회
     get:
@@ -135,9 +151,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 사용자 정보 수정
     put:
       tags:
@@ -168,6 +186,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -175,9 +195,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 이메일 인증
   /user/activate:
     post:
@@ -205,6 +227,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -212,11 +236,15 @@ paths:
         '401':
           description: 활성화 토큰이 일치하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '404':
           description: 사용자 정보를 찾을 수 없을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 서버 에러 발생시 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 지갑 등록
   /user/add/wallet:
     post:
@@ -248,12 +276,16 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/Unauthorized'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 드
   /user/profile:
     post:
@@ -285,6 +317,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -292,9 +326,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 로그인
   /user/login:
     post:
@@ -325,10 +361,16 @@ paths:
             $ref: '#/definitions/LoginResult'
         '404':
           description: 아이디와 비밀번호가 일치하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '423':
           description: 회원정보는 존재하나 이메일 인증은 거치지 않은 경우 리턴한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 로그아웃
   /user/logout:
     post:
@@ -354,10 +396,16 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 헤더로 엑세스 토큰이 전달되지 않았을 때 발생하는 에러입니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 인증메일 요청
   /user/request_auth_code:
     post:
@@ -384,10 +432,16 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '404':
           description: 인증 토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 비밀번호 변경
   /user/change_password:
     put:
@@ -419,14 +473,20 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '404':
           description: 기존 비밀번호가 일치하지 않은 경우 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
 
   # 지갑 입출금 내역 조회
   /wallet/transactions:
@@ -471,9 +531,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 서버 에러
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 위치 정보 업로드
   /content:
     post:
@@ -505,6 +567,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -512,9 +576,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   /content/nearby:
     get:
       tags:
@@ -569,9 +635,11 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   /content/behavior:
     put:
       tags:
@@ -603,6 +671,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
@@ -610,11 +680,15 @@ paths:
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
-            $ref: '#/definitions/Unauthorized'
+            $ref: '#/definitions/ResponseMessage'
         '404':
           description: 일치하는 locationId가 내것이 아니거나 존재하지 않을 때
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '500':
           description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
 definitions:
   ErrorField:
     type: object
@@ -626,14 +700,17 @@ definitions:
   FormError:
     type: object
     properties:
-      status:
-        description: 상태 코드
-        type: integer
-        example: 400
       errors:
         type: array
         items:
           $ref: '#/definitions/ErrorField'
+  ResponseMessage:
+    type: object
+    properties:
+      resmessage:
+        description: '응답 메시지'
+        type: string
+        example: Successfully created.
   Id:
     type: integer
     format: int64
