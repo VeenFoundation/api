@@ -978,10 +978,10 @@ definitions:
       longitude:
         description: 경도
         type: float
-      from:
+      fromTime:
         description: 콘텐츠 조회 시작 시간(UTC Timestamp) 
         type: integer
-      until:
+      untilTime:
         description: 콘텐츠 조회 종료 시간(UTC Timestamp)
         type: integer
       zoom:
