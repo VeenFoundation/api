@@ -582,10 +582,10 @@ paths:
           schema:
             $ref: '#/definitions/ResponseMessage'
   /content/nearby:
-    get:
+    post:
       tags:
         - content
-      summary: 현재 위치 색
+      summary: 현재 위치
       operationId: searchNearby
       description: 현재 주어진 위도 경도 주변에서 내 동선정보를 가져온다.
       produces:
@@ -603,26 +603,12 @@ paths:
           description: 사용자 접근 토큰
           required: true
           type: string
-        - in: query
-          name: lat
-          description: 위도
-          type: string
+        - in: body
+          name: body
+          description: 주어진 검색조건으로 기반해서 주변위치를 검색한다.
           required: true
-        - in: query
-          name: lng
-          description: 경도
-          type: string
-          required: true
-        - in: query
-          name: from
-          description: 콘텐츠 조회 시작 시간(UTC Timestamp) 
-          required: true
-          type: string
-        - in: query
-          name: until
-          description: 콘텐츠 조회 종료 시간(UTC Timestamp)
-          required: true
-          type: string
+          schema:
+            $ref: '#/definitions/SearchNearLocation'
       responses:
         default:
           description: Successful Operation
@@ -983,6 +969,24 @@ definitions:
         type: integer
         description: 컨텐츠의 시간대
         minLength: 1
+  SearchNearLocation:
+    type: object
+    properties: 
+      lat:
+        description: 위도
+        type: string
+      lng:
+        description: 경도
+        type: string
+      from:
+        description: 콘텐츠 조회 시작 시간(UTC Timestamp) 
+        type: integer
+      until:
+        description: 콘텐츠 조회 종료 시간(UTC Timestamp)
+        type: integer
+      zoom:
+        description: 지도의 크기 정보 (줌의 상태)
+        type: integer
   Content:
     type: array
     items:
