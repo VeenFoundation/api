@@ -997,6 +997,8 @@ paths:
       responses:
         default:
           description: Successful Operation
+          schema:
+            $ref: '#/definitions/NationCodes'
   # 앱 최신 버전조회
   /common/app_version:
     get:
@@ -1168,7 +1170,7 @@ definitions:
         type: string
         example: 1993/12/03
       gender:
-        description: 성별
+        description: 사용자 성별 ( '남자=m', '여자=f', '레즈비언=l', '게이=g', '바이섹슈얼=b', '트랜스젠더=t')
         type: string
         example: m/f
       promotionCode:
@@ -1511,3 +1513,16 @@ definitions:
         description: 안드로이드 및 아이폰 구분
         type: string
         example: ios
+  NationCodes:
+    type: array
+    items:
+      type: object
+      properties:
+        nationCode:
+          description: 국가 코드
+          type: string
+          example: kr
+        nationName:
+          description: 국가 이름
+          type: string
+          example: Republic of Korea
