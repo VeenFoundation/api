@@ -1196,7 +1196,8 @@ definitions:
       model:
         description: 기기 모델명
         type: string
-      deviceUUID: 기기 고유값
+      deviceUUID: 
+        description: 기기 고유값
         type: string
       appPushKey:
         description: 앱 푸시키
