@@ -288,7 +288,7 @@ paths:
           description: 얘기치 못한 서버 에러 시 발생
           schema:
             $ref: '#/definitions/ResponseMessage'
-  # 드
+  # 프로필 사진 업로드
   /user/profile:
     post:
       tags:
@@ -619,7 +619,7 @@ paths:
     put:
       tags:
         - user
-      summary: 현재 설정정보를 조회한다.
+      summary: 현재 사용자의 설정 정보를 변경한다.
       operationId: settingSet
       produces:
         - application/json
@@ -656,7 +656,7 @@ paths:
     put:
       tags:
         - user
-      summary: 현재 설정정보를 조회한다.
+      summary: 현재 설정정보를 전환한다.
       operationId: settingToggle
       produces:
         - application/json
