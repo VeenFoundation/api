@@ -288,7 +288,7 @@ paths:
           description: 얘기치 못한 서버 에러 시 발생
           schema:
             $ref: '#/definitions/ResponseMessage'
-  # 프로필 사진 업로드
+  # 프로필 사진 업로드 
   /user/profile:
     post:
       tags:
@@ -1123,7 +1123,7 @@ definitions:
         type: string
         example: 1993/12/03
       gender:
-        description: 성별
+        description: 사용자 성별 ( '남자=m', '여자=f', '레즈비언=l', '게이=g', '바이섹슈얼=b', '트랜스젠더=t')
         type: string
         example: m/f
       nationality:
