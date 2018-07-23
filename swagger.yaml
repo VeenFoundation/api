@@ -52,7 +52,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: body
@@ -93,7 +95,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: body
@@ -137,7 +141,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -171,7 +177,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -217,7 +225,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: body
@@ -261,7 +271,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -302,7 +314,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -347,7 +361,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: body
@@ -387,7 +403,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -422,7 +440,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: body
@@ -458,7 +478,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -503,8 +525,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -539,8 +563,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -574,8 +600,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
       responses:
@@ -596,8 +624,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -627,8 +657,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -664,8 +696,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -702,7 +736,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -749,7 +785,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -788,7 +826,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -833,7 +873,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -868,9 +910,12 @@ paths:
     put:
       tags:
         - content
-      summary: 기존 위치에 행동 기록하기
+      summary: 치에 행동 기록하기
       operationId: searchNearby
-      description: 10분마다 수집한 위치에다가 특정 행동을 기록한다. (의료, 쇼핑, 식사 등등)
+      description: |
+        10분마다 수집한 위치에다가 특정 행동을 기록한다. (의료, 쇼핑, 식사 등등)
+
+        행동을 수정할 때도 같은 API를 사용하면 된다.
       produces:
         - application/json
       parameters:
@@ -878,7 +923,9 @@ paths:
           name: lang
           description: |
             리턴 메시지의 언어를 구별할 때 사용한다.
+
             현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
@@ -927,8 +974,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
       responses:
@@ -948,8 +997,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
       responses:
@@ -969,8 +1020,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
       responses:
@@ -990,8 +1043,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
       responses:
@@ -1013,8 +1068,10 @@ paths:
         - in: header
           name: lang
           description: |
-            리턴 메시지의 언어를 구별할 때 사용한다. \n
-            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
           type: string
         - in: header
