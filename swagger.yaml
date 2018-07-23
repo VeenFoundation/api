@@ -1179,6 +1179,14 @@ definitions:
         description: 이메일 인증 여부
         type: string
         example : 1
+      veenRanking:
+        description: 빈 소유 랭킹
+        type: integer
+        example: 1
+      registrationRanking:
+        description: 가입 순위 랭킹
+        type: integer
+        example: 1
   Login:
     type: object
     properties:
