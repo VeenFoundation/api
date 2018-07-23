@@ -27,6 +27,8 @@ x-tagGroups:
       - user
       - content
       - wallet
+      - policy
+      - common
 x-servers:
   - url: //api.liveen.io/v1
     description: Production Server
@@ -487,7 +489,205 @@ paths:
           description: 얘기치 못한 서버 에러 시 발생
           schema:
             $ref: '#/definitions/ResponseMessage'
-
+  # 가입 순위 조회
+  /user/registration_ranking:
+    get:
+      tags:
+        - user
+      summary: 가입 순위 조회
+      description: 자신이 몇번째 가입한 유저인지 조회한다.
+      operationId: registrationRanking
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/RegistrationRanking'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 가입 순위 조회
+  /user/veen_ranking:
+    get:
+      tags:
+        - user
+      summary: 빈 소유 순위 조회
+      description: 자신이 얼마나 빈을 많이 가지고 있는지 순위를 조회할 수 있다.
+      operationId: veenRanking
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/VeenRanking'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 얘기치 못한 서버 에러 시 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 전체 사용자 수 조회
+  /user/total_users:
+    get:
+      tags:
+        - user
+      summary: 전체 사용자 수를 조회한다.
+      operationId: totalUsers
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/TotalUsers'
+  # 설정정보 조회기능
+  /user/setting/get:
+    get:
+      tags:
+        - user
+      summary: 현재 설정정보를 조회한다.
+      operationId: settingGet
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/SettingsGet'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 설정정보 설정기능
+  /user/setting/set:
+    put:
+      tags:
+        - user
+      summary: 현재 설정정보를 조회한다.
+      operationId: settingSet
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 설정 할 정보를 넘겨준다.
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsSet'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 설정정보 설정기능
+  /user/setting/toggle:
+    put:
+      tags:
+        - user
+      summary: 현재 설정정보를 조회한다.
+      operationId: settingToggle
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 현재 회원의 on/off할 설정항목을 지정해서 넘겨준다.
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsToggle'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 지갑 입출금 내역 조회
   /wallet/transactions:
     get:
@@ -510,16 +710,15 @@ paths:
           description: 사용자 접근 토큰
           required: true
           type: string
-        - in: header
+        - in: query
           name: filter
-          description: all, sent, received or reward
+          description: all, sent, received or reward 디폴트 값으로 all이 설정된다.
           type: string
-          required: all
-        - in: header
+        - in: query
           name: from
           type: string
           description: 시간 조회 조건(UTC)
-        - in: header
+        - in: query
           name: until
           type: string
           description: 시간 조회 조건(UTC)
@@ -528,6 +727,45 @@ paths:
           description: Successful Operation
           schema:
             $ref: '#/definitions/Transactions'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 서버 에러
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 지갑 입출금 내역 조회
+  /wallet/expected_veens:
+    get:
+      tags:
+        - wallet
+      summary: 예상 빈 수 내역조회
+      operationId: expectedVeens
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+            현재는 'en', 'ko' 두가지 값이 있으며
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: query
+          name: date
+          description: 내역을 조회 할 일자를 적는다. 예를 들어 '2018-02-01'이라고 적으면 해당 일자의 내역을 조회해서 리턴한다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ExpectedVeens'
         '401':
           description: 접근토큰이 유효하지 않을 때 발생한다.
           schema:
@@ -675,6 +913,117 @@ paths:
           description: 업로드에 실패했을 때 발생합니다.
           schema:
             $ref: '#/definitions/ResponseMessage'
+  # 개인정보처리방침
+  /policy/personal_information:
+    get:
+      tags:
+        - policy
+      summary: 개인정보처리방침
+      description: 개인정보처리방침을 조회하는 웹 페이지이다. HTML형태로 보여주며 모바일 내에서 웹 뷰로 호출하면 된다.
+      operationId: policyPersonalInformation
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+  # 위치기반 서비스 이용약관
+  /policy/location:
+    get:
+      tags:
+        - policy
+      summary: 위치기반 서비스 이용약관
+      description: 위치기반 서비스 이용약관을 조회하는 웹 페이지이다. HTML형태로 보여주며 모바일 내에서 웹 뷰로 호출하면 된다.
+      operationId: policyLocation
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+  # 이용약관
+  /policy/terms_and_condition:
+    get:
+      tags:
+        - policy
+      summary: 이용약관
+      description: 이용약관을 조회하는 웹 페이지이다. HTML형태로 보여주며 모바일 내에서 웹 뷰로 호출하면 된다.
+      operationId: policyTermsAndCondition
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+  # 국가 코드 리스트 조회
+  /common/nation_codes:
+    get:
+      tags:
+        - common
+      summary: 국가 코드 리스트 조회
+      description: 국가 코드 리스트를 조회한다
+      operationId: policyLocation
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+  # 앱 최신 버전조회
+  /common/app_version:
+    get:
+      tags:
+        - common
+      summary: 앱 버전조회
+      description: 안드로이드 및 아이폰 별 앱의 최신버전을 조회한다.
+      operationId: policyLocation
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다. \n
+            현재는 'en', 'ko' 두가지 값이 있으며 \n
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: os
+          description: 앱 버전을 조회하는 키워드이다. 'android' | 'ios'로 구분한다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/AppVersion'
 definitions:
   ErrorField:
     type: object
@@ -714,25 +1063,21 @@ definitions:
       walletAddress:
         description: 지갑 주소 값
         type: string
-        minLength: 1
       publicKey:
         description: 지갑의 공개키
         type: string
-        minLength: 1
   VerifyBetaTester:
     type: object
     properties:
       ticket:
         description: QR코드 프라이빗키를 해싱한 값
         type: string
-        minLength: 1
   VerifyPromotion:
     type: object
     properties:
       promotionCode:
         description: 프로모션 코드
         type: string
-        minLength: 1
         emample: a123456789
   ActivateEmail:
     type: object
@@ -740,55 +1085,35 @@ definitions:
       activationCode:
         description: 이메일로 전송된 인증번호
         type: string
-        minLength: 1
       email:
         description: 이메일
         type: string
-        minLength: 1
   CreateUser:
     type: object
     properties:
       name:
         description: 사용자 이름
         type: string
-        minLength: 4
         example: David Lee
       email:
         description: 이메일 주소, 실질적으로 아이디로 사용한다.
         type: string
-        minLength: 1
         example: cailhuiris@finotek.co.kr
       password:
         description: '사용자 비밀번호'
         type: string
         format: password
-        minLength: 7
         example: fino1838tek!!@#
       promotionCode:
         description: 프로모션 코드
         type: string
-        minLength: 4
         example: a123456789
-      os:
-        description: OS 정보
-        type: string
-        minLength: 1
-      model:
-        description: 기기 모델명
-        type: string
-        minLength: 1
-      appKey:
-        description: Liveen app key
-        type: string
-        minLength: 1
-
   UpdateUser:
     type: object
     properties:
       name:
         description: 사용자 이름
         type: string
-        minLength: 4
         example: David Lee
       introduction:
         description: 사용자 소개글
@@ -822,12 +1147,10 @@ definitions:
       name:
         description: 사용자 이름
         type: string
-        minLength: 4
         example: David Lee
       email:
         description: 이메일 주소, 실질적으로 아이디로 사용한다.
         type: string
-        minLength: 1
         example: cailhuiris@finotek.co.kr
       profileImage:
         description: 프로필 사진 URL
@@ -836,7 +1159,6 @@ definitions:
       walletAddress:
         description: 사용자의 지갑 주소
         type: string
-        minLength: 1
         example: 0x93BC4bec6D678e8e74bB9EC3e1Be5EDfA608e2B6a123n
       introduction:
         description: 사용자 소개글
@@ -871,11 +1193,14 @@ definitions:
       os:
         description: OS 정보
         type: string
-        minLength: 1
       model:
         description: 기기 모델명
         type: string
-        minLength: 1
+      deviceUUID: 기기 고유값
+        type: string
+      appPushKey:
+        description: 앱 푸시키
+        type: string
   LoginResult:
     type: object
     properties:
@@ -886,36 +1211,30 @@ definitions:
       expiredAt:
         description: 토큰 만료 일자
         type: date-time
-        minLength: 1
   TempToken:
     type: object
     properties:
       tempToken:
         description: 인증 메일 요청을 하기 위한 임시 토큰
         type: string
-        minLength: 1
       expiredAt:
         description: 토큰 만료 일자
         type: date-time
-        minLength: 1
   RequestAuthCode:
     type: object
     properties:
       email:
         description: 사용자 이메일
         type: string
-        minLength: 1
       password:
         description: 사용자 비밀번호
         type: string
-        minLength: 1
   AuthCode:
     type: object
     properties:
       authCode:
         description: 인증번호
         type: string
-        minLength: 1
   ChangePassword:
     type: object
     properties:
@@ -931,44 +1250,76 @@ definitions:
       email:
         description: 비밀번호를 찾을 이메일 주소 값 입력
         type: string
+  TotalUsers:
+    type: object
+    properties:
+      total:
+        description: 전체 사용자 수
+        type: integer
+  RegistrationRanking:
+    type: object
+    properties:
+      rank:
+        description: 가입 순위
+        type: integer
+  VeenRanking:
+    type: object
+    properties:
+      veens:
+        description: 자신의 빈 소유 개수 조회
+        type: integer
+      rank:
+        description: 빈 소유 순위
+        type: integer
+  SettingsGet:
+    type: object
+    properties:
+      location:
+        description: 위치정보 수집 동의
+        type: boolean
+  SettingsSet:
+    type: object
+    properties:
+      location:
+        description: 위치정보 수집 동의 항목
+        type: boolean
+  SettingsToggle:
+    type: object
+    properties:
+      settingItem:
+        description: 설정 정보 중 on/off 토글 할 항목을 지정한다.
+        type: string
+        example: location
   UploadLocation:
     type: object
     properties:
       latitude:
         description: 위도
         type: float
-        minLength: 1
         example: 37.5662952
       longitude:
         description: 경도
         type: float
-        minLength: 1
         example: 126.97794509999994
       isCheckIn:
         description: 체크인인지 / 자동인지 여부
         type: integer
-        minLength: 1
         example: 'C/A (Check-in/Automatic)'
       timestamp:
         description:  현재 시간(UTC)
         type: integer
-        minLength: 1
       locationString:
         description: userId, latitude, longitude, timestamp의 json string
         type: string
-        minLength: 1
       locationSignature:
         description: locatoinString의 서명
         type: string
-        minLength: 1
       publicKey:
         description: 공개 키
         type: string
-        minLength: 1
       timeZone:
         type: integer
         description: 컨텐츠의 시간대
-        minLength: 1
   SearchNearLocation:
     type: object
     properties: 
@@ -1001,12 +1352,10 @@ definitions:
         latitude:
           description: 위도
           type: float
-          minLength: 1
           example: 37.5662952
         longitude:
           description: 경도
           type: float
-          minLength: 1
           example: 126.97794509999994
         isCheckIn:
           description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
@@ -1015,7 +1364,6 @@ definitions:
         behavior:
           description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
           type: string
-          minLength: 1
           example: FITN // (운동), SHOP // (쇼핑)
         createdAt:
           description: 위치등록일(UTC)
@@ -1033,24 +1381,19 @@ definitions:
       behavior:
         description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
         type: string
-        minLength: 1
         example: FITN // (운동), SHOP // (쇼핑)
       behaviorString:
         description: userId, behavior, timestamp의 json string
         type: string
-        minLength: 1
       timestamp:
         description:  현재 시간(UTC)
         type: integer
-        minLength: 1
       signature:
         description: behaviorString의 서명
         type: string
-        minLength: 1
       publicKey:
         description: 공개 키
         type: string
-        minLength: 1
   Transactions:
     type: array
     items:
@@ -1059,69 +1402,103 @@ definitions:
         type:
           description: 송금인지, 입금인지 나타낸다. ('s', 'r') 로 구분한다.
           type: string
-          minLength: 1
           example: s
         amount:
           description: VEEN 의 양
           type: integer
-          minLength: 1
           example: 10000
         from:
           description: 보낸이 주소
           type: string
-          minLength: 1
           example: 0xeirne38y37h47h454j54h84h
         to:
           description: 받은이 주소 (나한테 입근된거라면 to의 주소는 내 주소가 된다.)
           type: string
-          minLength: 1
           example: 0xeirne38y37h47h454j54h84h
         sender:
           description: 보낸 이 이름
           type: string
-          minLength: 1
         receiver:
           description: 받은 이 이름
           type: string
-          minLength: 1
         date:
           description: 거래가 이루어진 날짜
-          minLength: 1
           type: date-time
         succeeded:
           description: 성공 여부 (0 이면 실패, 1 이면 성공한 거래, -1이면 pending중인 거래)
           type: integer
-          minLength: 1
           example: 1
+  ExpectedVeens:
+    type: array
+    itmes:
+      type: object
+      properties:
+        contentId:
+          description: 컨텐츠 ID (UUID)
+          type: string
+          example: 5b4d4bd3fb6170b8c8c1b395
+        behavior:
+          description: 행동 기록
+          type: string
+          example: DINNER
+        address:
+          description: 기록된 주소
+          type: string
+          example: 서울특별시 서초구 우면동 태봉로 140
+        time:
+          description: 기록된 시간
+          type: string
+          example: 12:20
+        isCheckIn:
+          description: 체크인 여부
+          type: boolean
+          example: true
+        expected:
+          description: 흭득 예상 빈
+          type: integer
+          example: 10
+        earned:
+          description: 실제로 받은 빈의 수
+          type: integer
+          example: 5
+        isEarned: 
+          description: 해당 컨텐츠로 실제로 빈을 받은건지 아닌지 여부
+          type: boolean
+          example: true
   SendTransaction:
     type: object
     properties:
       toAddress:
         description: 받는 이 주소
         type: string
-        minLength: 1
       amount:
         description: Veen 금액
         type: integer
-        minLength: 1
       publicKey:
         description: 트랜잭션 서명 공개 키
         type: string
-        minLength: 1
       signature:
         description: 트랜잭션 서명
         type: string
-        minLength: 1
   Unauthorized:
     type: object
     properties:
       source:
         description: 에러가 발생한 지점
         type: string
-        minLength: 1
         example: api_key
       result:
         description: 결과 메시지
         type: string
-        minLength: 1
         example: Invalid api key.
+  AppVersion:
+    type: object
+    properties:
+      version:
+        description: 앱 버전
+        type: string
+        example: 1.0.0
+      os:
+        description: 안드로이드 및 아이폰 구분
+        type: string
+        example: ios
