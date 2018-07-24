@@ -511,88 +511,12 @@ paths:
           description: 얘기치 못한 서버 에러 시 발생
           schema:
             $ref: '#/definitions/ResponseMessage'
-  # 가입 순위 조회
-  /user/registration_ranking:
-    get:
-      tags:
-        - user
-      summary: 가입 순위 조회
-      description: 자신이 몇번째 가입한 유저인지 조회한다.
-      operationId: registrationRanking
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: lang
-          description: |
-            리턴 메시지의 언어를 구별할 때 사용한다.
-
-            현재는 'en', 'ko' 두가지 값이 있으며
-
-            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
-          type: string
-        - in: header
-          name: access-token
-          description: 사용자 접근 토큰
-          required: true
-          type: string
-      responses:
-        default:
-          description: Successful Operation
-          schema:
-            $ref: '#/definitions/RegistrationRanking'
-        '401':
-          description: 접근토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-  # 가입 순위 조회
-  /user/veen_ranking:
-    get:
-      tags:
-        - user
-      summary: 빈 소유 순위 조회
-      description: 자신이 얼마나 빈을 많이 가지고 있는지 순위를 조회할 수 있다.
-      operationId: veenRanking
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: lang
-          description: |
-            리턴 메시지의 언어를 구별할 때 사용한다.
-
-            현재는 'en', 'ko' 두가지 값이 있으며
-
-            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
-          type: string
-        - in: header
-          name: access-token
-          description: 사용자 접근 토큰
-          required: true
-          type: string
-      responses:
-        default:
-          description: Successful Operation
-          schema:
-            $ref: '#/definitions/VeenRanking'
-        '401':
-          description: 접근토큰이 유효하지 않을 때 발생한다.
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-        '500':
-          description: 얘기치 못한 서버 에러 시 발생
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-  # 코인 지급조회
+  # 예상코인 지급조회
   /user/paid_veens:
     get:
       tags:
         - user
-      summary: 코인 지급조회
+      summary: 예상코인 지급조회
       description: 이번 회차에서 지급 할 예상 코인을 조회한다.
       operationId: paidVeen
       produces:
@@ -611,7 +535,7 @@ paths:
         default:
           description: Successful Operation
           schema:
-            $ref: '#/definitions/TotalUsers'
+            $ref: '#/definitions/ExpectedPaidVeen'
   # 전체 사용자 수 조회
   /user/total_users:
     get:
@@ -1207,7 +1131,7 @@ definitions:
         type: string
         example: 1993/12/03
       gender:
-        description: 사용자 성별 ( '남자=m', '여자=f', '레즈비언=l', '게이=g', '바이섹슈얼=b', '트랜스젠더=t')
+        description: 사용자 성별 ( '남자=m', '여자=f', '기타=e')
         type: string
         example: m/f
       nationality:
@@ -1252,7 +1176,7 @@ definitions:
         type: string
         example: 1993/12/03
       gender:
-        description: 사용자 성별 ( '남자=m', '여자=f', '레즈비언=l', '게이=g', '바이섹슈얼=b', '트랜스젠더=t')
+        description: 사용자 성별 ( '남자=m', '여자=f', '기타=e')
         type: string
         example: m/f
       promotionCode:
@@ -1608,3 +1532,8 @@ definitions:
           description: 국가 이름
           type: string
           example: Republic of Korea
+  ExpectedPaidVeen:
+    type: object
+    properties:
+      type: object
+      properties:
