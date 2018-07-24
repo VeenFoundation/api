@@ -1008,7 +1008,7 @@ paths:
     get:
       tags:
         - common
-      summary: 앱 버전조회
+      summary: 전조회
       description: 안드로이드 및 아이폰 별 앱의 최신버전을 조회한다.
       operationId: appVersion
       produces:
@@ -1519,6 +1519,10 @@ definitions:
         description: 안드로이드 및 아이폰 구분
         type: string
         example: ios
+      mustBeUpdated:
+        description: 반드시 업데이트 되어야 하는지 여부 조회
+        type: boolean
+        example: true
   NationCodes:
     type: array
     items:
