@@ -212,7 +212,7 @@ paths:
             $ref: '#/definitions/ResponseMessage'
   # 회원탈퇴
   /user/deregister:
-    post:
+    delete:
       tags:
         - user
       summary: 회원탈퇴
