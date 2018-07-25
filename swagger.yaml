@@ -1165,9 +1165,9 @@ definitions:
         description: 사용자 소개글
         type: string
       birth:
-        description: 생년/월일
+        description: 생년월일 (Ymd)
         type: string
-        example: 1993/12/03
+        example: 19931203
       gender:
         description: 사용자 성별 ( '남자=m', '여자=f', '기타=e')
         type: string
