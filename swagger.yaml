@@ -1046,7 +1046,7 @@ paths:
     get:
       tags:
         - common
-      summary: 전조회
+      summary: 앱 최신 버전조회
       description: 안드로이드 및 아이폰 별 앱의 최신버전을 조회한다.
       operationId: appVersion
       produces:
