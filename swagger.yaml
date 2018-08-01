@@ -1422,9 +1422,9 @@ definitions:
           type: boolean
           example: true
         behavior:
-          description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
+          description: 행동을 나타내는 코드
           type: string
-          example: FITN // (운동), SHOP // (쇼핑)
+          example: SHOP
         createdAt:
           description: 위치등록일(UTC)
           type: date-time
@@ -1439,9 +1439,9 @@ definitions:
         type: integer
         example: 1
       behavior:
-        description: 행동을 나타내는 4자리 코드 (운동, 쇼핑, 식사 등)
+        description: 행동을 나타내는 코드
         type: string
-        example: FITN // (운동), SHOP // (쇼핑)
+        example: SHOP
       behaviorString:
         description: userId, behavior, timestamp의 json string
         type: string
