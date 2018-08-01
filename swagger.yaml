@@ -1372,8 +1372,8 @@ definitions:
         example: 126.97794509999994
       isCheckIn:
         description: 체크인인지 / 자동인지 여부
-        type: integer
-        example: 'C/A (Check-in/Automatic)'
+        type: boolean
+        example: true
       timestamp:
         description:  현재 시간(UTC)
         type: integer
