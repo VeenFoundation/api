@@ -549,13 +549,13 @@ paths:
           description: 얘기치 못한 서버 에러 시 발생
           schema:
             $ref: '#/definitions/ResponseMessage'
-  # 예상코인 지급조회
+  # 예상 코인 지급조회
   /user/paid_veens:
     get:
       tags:
         - user
       summary: 예상코인 지급조회
-      description: 이번 회차에서 지급 할 예상 코인을 조회한다.
+      description: 현재 회차에서 지급 할 예상 코인을 조회한다.
       operationId: paidVeen
       produces:
         - application/json
@@ -568,6 +568,11 @@ paths:
             현재는 'en', 'ko' 두가지 값이 있으며
 
             헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
           type: string
       responses:
         default:
@@ -1485,7 +1490,7 @@ definitions:
           example: 1
   ExpectedVeens:
     type: array
-    itmes:
+    items:
       type: object
       properties:
         contentId:
