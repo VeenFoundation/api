@@ -902,8 +902,8 @@ paths:
     put:
       tags:
         - content
-      summary: 치에 행동 기록하기
-      operationId: searchNearby
+      summary: 업로드 된 위치에 행동 기록하기
+      operationId: addBehavior
       description: |
         10분마다 수집한 위치에다가 특정 행동을 기록한다. (의료, 쇼핑, 식사 등등)
 
