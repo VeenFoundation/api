@@ -1226,6 +1226,18 @@ definitions:
         description: 프로모션 코드
         type: string
         example: a123456789
+      nation:
+        description: 국가 정보
+        type: object
+        properties:
+          nationCode: 
+            description: 국가 코드
+            type: string
+            example: ko
+          nationName:
+            description: 국가 이름
+            type: string
+            example: Republic of Korea.
       isActive:
         description: 이메일 인증 여부
         type: string
@@ -1398,11 +1410,8 @@ definitions:
       longitude:
         description: 경도
         type: float
-      fromTime:
-        description: 콘텐츠 조회 시작 시간(UTC Timestamp) 
-        type: integer
-      untilTime:
-        description: 콘텐츠 조회 종료 시간(UTC Timestamp)
+      nowtime:
+        description: 현재 폰 기준의 timestamp (UTC Timestamp)
         type: integer
       zoom:
         description: 지도의 크기 정보 (줌의 상태)
