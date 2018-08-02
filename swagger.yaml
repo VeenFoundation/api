@@ -1595,18 +1595,21 @@ definitions:
         type: boolean
         example: true
   NationCodes:
-    type: array
-    items:
-      type: object
-      properties:
-        nationCode:
-          description: 국가 코드
-          type: string
-          example: kr
-        nationName:
-          description: 국가 이름
-          type: string
-          example: Republic of Korea
+    type: object
+    properties:
+      nations:
+        type: array
+        items:
+          type: object
+          properties:
+            nationCode:
+              description: 국가 코드
+              type: string
+              example: kr
+            nationName:
+              description: 국가 이름
+              type: string
+              example: Republic of Korea
   ExpectedPaidVeen:
     type: object
     properties:
