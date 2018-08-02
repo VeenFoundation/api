@@ -1421,38 +1421,41 @@ definitions:
         description: 지도의 크기 정보 (줌의 상태)
         type: integer
   Content:
-    type: array
-    items:
-      type: object
-      properties:
-        contentId:
-          description: 컨텐츠 ID
-          type: integer
-        userId:
-          description: 사용자 아이디
-          type: integer
-        latitude:
-          description: 위도
-          type: float
-          example: 37.5662952
-        longitude:
-          description: 경도
-          type: float
-          example: 126.97794509999994
-        isCheckIn:
-          description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
-          type: boolean
-          example: true
-        behavior:
-          description: 행동을 나타내는 코드
-          type: string
-          example: SHOP
-        createdAt:
-          description: 위치등록일(UTC)
-          type: date-time
-        timeZone:
-          description: 시간대
-          type: integer
+    type: object
+    properties:
+      locations:
+        type: array
+        items:
+          type: object
+          properties:
+            contentId:
+              description: 컨텐츠 ID
+              type: integer
+            userId:
+              description: 사용자 아이디
+              type: integer
+            latitude:
+              description: 위도
+              type: float
+              example: 37.5662952
+            longitude:
+              description: 경도
+              type: float
+              example: 126.97794509999994
+            isCheckIn:
+              description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
+              type: boolean
+              example: true
+            behavior:
+              description: 행동을 나타내는 코드
+              type: string
+              example: SHOP
+            createdAt:
+              description: 위치등록일(UTC)
+              type: date-time
+            timeZone:
+              description: 시간대
+              type: integer
   AddBehaviorToLocation:
     type: object
     properties:
@@ -1511,42 +1514,45 @@ definitions:
           type: integer
           example: 1
   ExpectedVeens:
-    type: array
-    items:
-      type: object
-      properties:
-        contentId:
-          description: 컨텐츠 ID (UUID)
-          type: string
-          example: 5b4d4bd3fb6170b8c8c1b395
-        behavior:
-          description: 행동 기록
-          type: string
-          example: DINNER
-        address:
-          description: 기록된 주소
-          type: string
-          example: 서울특별시 서초구 우면동 태봉로 140
-        time:
-          description: 기록된 시간
-          type: string
-          example: 12:20
-        isCheckIn:
-          description: 체크인 여부
-          type: boolean
-          example: true
-        expected:
-          description: 흭득 예상 빈
-          type: integer
-          example: 10
-        earned:
-          description: 실제로 받은 빈의 수
-          type: integer
-          example: 5
-        isEarned: 
-          description: 해당 컨텐츠로 실제로 빈을 받은건지 아닌지 여부
-          type: boolean
-          example: true
+    type: object
+    properties:
+      expectedVeens:
+        type: array
+        items:
+          type: object
+          properties:
+            contentId:
+              description: 컨텐츠 ID (UUID)
+              type: string
+              example: 5b4d4bd3fb6170b8c8c1b395
+            behavior:
+              description: 행동 기록
+              type: string
+              example: DINNER
+            address:
+              description: 기록된 주소
+              type: string
+              example: 서울특별시 서초구 우면동 태봉로 140
+            time:
+              description: 기록된 시간
+              type: string
+              example: 12:20
+            isCheckIn:
+              description: 체크인 여부
+              type: boolean
+              example: true
+            expected:
+              description: 흭득 예상 빈
+              type: integer
+              example: 10
+            earned:
+              description: 실제로 받은 빈의 수
+              type: integer
+              example: 5
+            isEarned: 
+              description: 해당 컨텐츠로 실제로 빈을 받은건지 아닌지 여부
+              type: boolean
+              example: true
   SendTransaction:
     type: object
     properties:
