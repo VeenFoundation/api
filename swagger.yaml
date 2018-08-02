@@ -558,9 +558,9 @@ paths:
     post:
       tags:
         - user
-      summary: 사용자 이름 중복 체크 API
+      summary: 사용자 이름 유효형 검증
       description: |
-        사용자 이름이 중복되는 경우를 체크해서 결과값을 true, false로 리턴한다.
+        사용자 이름을 사용할 수 있는지 여부를 체크해서 결과값을 true, false로 리턴한다.
 
         다만, 만약 ios@liveen.io의 이름이 David Lee인데 회원정보 수정 화면에서 David Lee로 적었을 때 이름이 중복된다고 막으면 안되기 때문에
 
@@ -1390,7 +1390,7 @@ definitions:
     type: object
     properties:
       isValid:
-        description: 사용할 수 있는 닉네임인지 아닌 지 여부, 사용할 수 없는 닉네임이면 `false`를 사용할 수 있는 닉네임이면 `true`를 리턴한다.
+        description: 사용할 수 있는 닉네임인지 아닌 지 여부를 리턴한다. 사용할 수 없는 닉네임이면 `false`를 사용할 수 있는 닉네임이면 `true`를 리턴한다.
         type: boolean
   FindPassword:
     type: object
