@@ -565,7 +565,7 @@ paths:
         다만, 만약 ios@liveen.io의 이름이 David Lee인데 회원정보 수정 화면에서 David Lee로 적었을 때 이름이 중복된다고 막으면 안되기 때문에
 
         그 부분을 검증하기 위해서 이메일과 이름 두개의 필드를 받아야 한다.
-      operationId: login
+      operationId: validateName
       produces:
         - application/json
       parameters:
