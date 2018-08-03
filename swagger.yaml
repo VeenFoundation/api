@@ -609,7 +609,7 @@ paths:
       summary: 사용자 이메일 유효형 검증
       description: |
         이메일을 계정 ID로 사용할 수 있는지 여부를 체크해서 결과값을 true, false로 리턴한다.
-      operationId: validateName
+      operationId: validateEmail
       produces:
         - application/json
       parameters:
