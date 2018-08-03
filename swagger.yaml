@@ -1616,7 +1616,10 @@ definitions:
               type: date-time
             timeZone:
               description: 시간대
-              type: integer
+              type: integer,
+            canBeUpdated:
+              description: 수정 가능 여부, 수정 가능하면 true 가능하지 않으면 false
+              type: boolean
   AddBehaviorToLocation:
     type: object
     properties:
