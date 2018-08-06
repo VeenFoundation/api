@@ -471,6 +471,10 @@ paths:
           description: 아이디와 비밀번호가 일치하지 않을 때 발생한다.
           schema:
             $ref: '#/definitions/LoginFailedResult'
+        '409':
+          description: 타 기기에서 이미 로그인 하고 있는 경우에 리턴한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
         '423':
           description: 회원정보는 존재하나 이메일 인증은 거치지 않은 경우 리턴한다.
           schema:
@@ -1413,13 +1417,6 @@ definitions:
           임시비밀번호로 로그인 했는지 여부를 리턴한다.
 
           임시비밀번호로 로그인 했으면 true, 정상 비밀번호로 로그인했으면 false를 리턴한다.
-        type: boolean
-        example: false
-      isLoggedOn:
-        description: |
-          타 기기에서 현재 로그인을 시도한 계정으로 접속중인지 아닌지 여부
-
-          만약 타 기기에서 로그인 중이라면 true를 리턴하고 아니라면 false를 리턴한다.
         type: boolean
         example: false
   OnlyEmail:
