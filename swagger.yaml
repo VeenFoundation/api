@@ -1414,6 +1414,14 @@ definitions:
 
           임시비밀번호로 로그인 했으면 true, 정상 비밀번호로 로그인했으면 false를 리턴한다.
         type: boolean
+        example: false
+      isLoggedOn:
+        description: |
+          타 기기에서 현재 로그인을 시도한 계정으로 접속중인지 아닌지 여부
+
+          만약 타 기기에서 로그인 중이라면 true를 리턴하고 아니라면 false를 리턴한다.
+        type: boolean
+        example: false
   OnlyEmail:
     type: object
     properties:
