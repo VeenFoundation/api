@@ -1620,6 +1620,15 @@ definitions:
             canBeUpdated:
               description: 수정 가능 여부, 수정 가능하면 true 가능하지 않으면 false
               type: boolean
+            expected:
+              description: 예상 흭득 VEEN
+              type: integer
+            actual:
+              description: 실제로 받은 VEEN
+              type: integer
+            received:
+              description: VEEN을 흭득했는지 여부, 아직 VEEN을 받지 못한 경우에는 실제로 받은 VEEN(actual)의 값이 0이 된다.
+              type: boolean
   AddBehaviorToLocation:
     type: object
     properties:
