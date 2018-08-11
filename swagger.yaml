@@ -1230,6 +1230,31 @@ paths:
           description: Successful Operation
           schema:
             $ref: '#/definitions/AppVersion'
+  # 앱 심사 진행 여부
+  /common/in_review:
+    get:
+      tags:
+        - common
+      summary: 앱 심사 진행 여부
+      description: 아이폰 앱스토어 앱 심사 진행중인지 아닌지 여부를 리턴한다.
+      operationId: appIsInReview
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/IsInReview'
 definitions:
   ErrorField:
     type: object
@@ -1795,6 +1820,13 @@ definitions:
         description: 반드시 업데이트 되어야 하는지 여부 조회
         type: boolean
         example: true
+  IsInReview:
+    type: object
+    properties:
+      isInReview:
+        description: 앱스토어 심사여부, 심사 중이라면 True 아니라면 False를 리턴한다.
+        type: string
+        example: false
   NationCodes:
     type: object
     properties:
