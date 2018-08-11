@@ -1154,13 +1154,13 @@ paths:
         default:
           description: Successful Operation
   # 오픈소스 이용고지
-  /policy/personal_information:
+  /policy/open_source:
     get:
       tags:
         - policy
       summary: 오픈소스 이용고지
       description: 오픈소스 이용고지를 조회하는 웹 페이지이다. HTML형태로 보여주며 모바일 내에서 웹 뷰로 호출하면 된다.
-      operationId: policyPersonalInformation
+      operationId: policyOpenSource
       produces:
         - application/json
       parameters:
