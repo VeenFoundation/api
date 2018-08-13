@@ -1030,6 +1030,44 @@ paths:
           description: 업로드에 실패했을 때 발생합니다.
           schema:
             $ref: '#/definitions/ResponseMessage'
+  /content/content:
+    post:
+      tags:
+        - content
+      summary: 단일 콘텐츠 조회
+      operationId: getContent
+      description: id를 통해 단일 컨텐츠의 상세 항목을 가져온다.
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 특정 콘텐츠의 상세내역을 가져온다.
+          required: true
+          schema:
+            $ref: '#/definitions/GetOneContent'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/Content'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   /content/behavior:
     put:
       tags:
@@ -1634,6 +1672,11 @@ definitions:
       zoom:
         description: 지도의 크기 정보 (줌의 상태)
         type: integer
+  GetOneContent:
+    type: object
+    properties:
+      contentId: 콘텐츠 ID
+      type: string
   Content:
     type: object
     properties:
@@ -1675,6 +1718,12 @@ definitions:
               type: boolean
             expected:
               description: 예상 흭득 VEEN
+              type: integer
+            expectedBasic:
+              description: 예상 획득 기본 VEEN
+              type: integer
+            expectedBasic:
+              description: 예상 획득 추가 VEEN
               type: integer
             actual:
               description: 실제로 받은 VEEN
