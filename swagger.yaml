@@ -1122,7 +1122,7 @@ paths:
         default:
           description: Successful Operation
           schema:
-            $ref: '#/definitions/ResponseMessage'
+            $ref: '#/definitions/OneContent'
         '400':
           description: 입력값의 형식이 틀렸을 때 발생
           schema:
