@@ -1084,6 +1084,57 @@ paths:
           description: 업로드에 실패했을 때 발생합니다.
           schema:
             $ref: '#/definitions/ResponseMessage'
+  # 단일 컨텐츠 조회
+  /content/content:
+    post:
+      tags:
+        - content
+      summary: 단일 컨텐츠 조회
+      operationId: getOneContent
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 위치 정보.
+          required: true
+          schema:
+            type: object
+            properties: 
+              contentId: 
+                description: 콘텐트 ID
+                type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '401':
+          description: 접근토큰이 유효하지 않을 때 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 업로드에 실패했을 때 발생합니다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 개인정보처리방침
   /policy/personal_information:
     get:
@@ -1675,13 +1726,56 @@ definitions:
               type: boolean
             expected:
               description: 예상 흭득 VEEN
-              type: integer
-            actual:
-              description: 실제로 받은 VEEN
-              type: integer
+              type: double
             received:
               description: VEEN을 흭득했는지 여부, 아직 VEEN을 받지 못한 경우에는 실제로 받은 VEEN(actual)의 값이 0이 된다.
               type: boolean
+  OneContent:
+    type: object
+    properties:
+      contentId:
+        description: 컨텐츠 ID
+        type: integer
+      userId:
+        description: 사용자 아이디
+        type: integer
+      latitude:
+        description: 위도
+        type: float
+        example: 37.5662952
+      longitude:
+        description: 경도
+        type: float
+        example: 126.97794509999994
+      isCheckIn:
+        description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
+        type: boolean
+        example: true
+      behavior:
+        description: 행동을 나타내는 코드
+        type: string
+        example: SHOP
+      createdAt:
+        description: 위치등록일(UTC)
+        type: date-time
+      timeZone:
+        description: 시간대
+        type: integer,
+      canBeUpdated:
+        description: 수정 가능 여부, 수정 가능하면 true 가능하지 않으면 false
+        type: boolean
+      expected:
+        description: 예상 흭득 VEEN
+        type: double
+      expectedBasic:
+        description: 예상 흭득 기본 VEEN 
+        type: double
+      expectedAdditional:
+        description: 예상 추가 적립 VEEN 
+        type: double
+      received:
+        description: VEEN을 흭득했는지 여부, 아직 VEEN을 받지 못한 경우에는 실제로 받은 VEEN(actual)의 값이 0이 된다.
+        type: boolean
   AddBehaviorToLocation:
     type: object
     properties:
@@ -1769,11 +1863,11 @@ definitions:
               example: true
             expected:
               description: 흭득 예상 빈
-              type: integer
+              type: double
               example: 10
             earned:
               description: 실제로 받은 빈의 수
-              type: integer
+              type: double
               example: 5
             isEarned: 
               description: 해당 컨텐츠로 실제로 빈을 받은건지 아닌지 여부
@@ -1852,5 +1946,5 @@ definitions:
         example: 2018-08-01
       paidVeen:
         description: 지급 예정 개수
-        type: integer
+        type: double
         example: 1000
