@@ -1470,8 +1470,8 @@ definitions:
             type: string
             example: Republic of Korea.
       isActive:
-        description: 이메일 인증 여부
-        type: string
+        description: 이메일 인증 여부, 1인경우에는 인증되었고 0인경우에는 인증되지 않은 회원이다.
+        type: integer
         example : 1
       veenRanking:
         description: 빈 소유 랭킹
