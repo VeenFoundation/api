@@ -29,6 +29,7 @@ x-tagGroups:
       - wallet
       - policy
       - common
+      - push
 x-servers:
   - url: //api.liveen.io/v1
     description: Production Server
@@ -1306,6 +1307,104 @@ paths:
           description: Successful Operation
           schema:
             $ref: '#/definitions/IsInReview'
+  # 푸시 리스트 조회
+  /push/gets:
+    get:
+      tags:
+        - push
+      summary: 푸시 아이템 리스트 조회
+      description: 푸시 아이템을 조회한다.
+      operationId: pushList
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/PushList'
+  # 푸시 아이템 읽음
+  /push/read:
+    put:
+      tags:
+        - push
+      summary: 푸시 아이템 읽음 처리
+      description: 특정 푸시 아이템의 상태를 읽음으로 변경한다.
+      operationId: readPush
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Push Read
+          required: true
+          schema:
+            $ref: '#/definitions/ReadPushForm'
+      responses:
+        default:
+          description: Successful Operation
+  # 푸시 키 등록
+  /push/reg:
+    post:
+      tags:
+        - push
+      summary: 회원의 푸시키를 등록한다.
+      description: 특정 회원의 푸시키를 등록한다.
+      operationId: addPushKey
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: header
+          name: access-token
+          description: 사용자 접근 토큰
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Push Read
+          required: true
+          schema:
+            $ref: '#/definitions/PushTokenRegForm'
+      responses:
+        default:
+          description: Successful Operation
 definitions:
   ErrorField:
     type: object
@@ -1948,3 +2047,48 @@ definitions:
         description: 지급 예정 개수
         type: double
         example: 1000
+  PushList:
+    type: object
+    properties:
+      nations:
+        type: array
+        items:
+          type: object
+          properties:
+            pushId:
+              description: 푸시 아이템 ID
+              type: integer
+              example: 1
+            type:
+              description: |
+                푸시 타입
+
+                (단일 메시지 : messsage, 아웃링크 : website, 공지사항 : notice)
+              type: string
+              example: message
+            title:
+              description: 푸시 메시지 제목
+              type: string
+              example: title
+            body:
+              description: 푸시 메시지 내용
+              type: string
+              example: body
+            read:
+              description: 푸시 내용을 읽었는지 여부
+              type: boolean
+              example: body
+  ReadPushForm:
+    type: object
+    properties:
+      pushId:
+        description: 푸시 아이템 ID
+        type: integer
+        example: 1
+  PushTokenRegForm:
+    type: object
+    properties:
+      appPushKey:
+        description: 푸시 키 등록
+        type: string
+        example: pushkey
