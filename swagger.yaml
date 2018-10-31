@@ -2078,7 +2078,7 @@ definitions:
   PushList:
     type: object
     properties:
-      nations:
+      items:
         type: array
         items:
           type: object
