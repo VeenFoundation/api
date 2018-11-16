@@ -7,7 +7,7 @@ basePath: /v1
 info:
   description: |
     이 명세서는 리빈 프로젝트의 API 설계 명세서입니다. (작성자: 이도현)
-  version: 0.0.3-beta
+  version: 1.0.0-beta
   title: Liveen Project (for beta)
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -1433,6 +1433,30 @@ paths:
       responses:
         default:
           description: Successful Operation
+  # 푸시 전송
+  /push/send:
+    post:
+      tags:
+        - push
+      summary: 회원 전체에 푸시를 발송한다.
+      description: 푸시 전송
+      operationId: sendPush
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: AUTH-KEY
+          description: 값을 LIVEEN-ADMIN으로 설정하시면 됩니다.
+          type: string
+        - in: body
+          name: body
+          description: Push Send Form
+          required: true
+          schema:
+            $ref: '#/definitions/PushSendForm'
+      responses:
+        default:
+          description: Successful Operation
 definitions:
   ErrorField:
     type: object
@@ -2120,3 +2144,22 @@ definitions:
         description: 푸시 키 등록
         type: string
         example: pushkey
+  PushSendForm:
+    type: object
+    properties:
+      title:
+        description: 푸시 타이틀
+        type: string
+        example: New Announcement.
+      body:
+        description: 푸시 내용
+        type: string
+        example: bla bla bla
+      type:
+        description: 푸시 타입 (단일 메시지 : messsage, 아웃링크 : website, 공지사항 : notice, 월렛이동 : wallet)
+        type: string
+        example: message
+      link:
+        description: 푸시 타입이 website일 경우, 아웃링크
+        type: string
+        example: https://www.naver.com/
