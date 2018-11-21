@@ -2115,7 +2115,7 @@ definitions:
               description: |
                 푸시 타입
 
-                (단일 메시지 : messsage, 아웃링크 : website, 공지사항 : notice, 월렛이동 : wallet)
+                (리워드: reward, 송금: tx, 공지: notice)
               type: string
               example: message
             title:
@@ -2159,7 +2159,7 @@ definitions:
         description: |
           푸시 타입 
           
-          (단일 메시지 : messsage, 아웃링크 : website, 공지사항 : notice, 월렛이동 : wallet)
+          (리워드: reward, 송금: tx, 공지: notice)
         type: string
         example: message
       link:
