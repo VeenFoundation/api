@@ -901,7 +901,7 @@ paths:
     get:
       tags:
         - wallet
-      summary: 예상 빈 수 내역조회
+      summary: 위치 히스토리
       operationId: expectedVeens
       produces:
         - application/json
@@ -988,7 +988,7 @@ paths:
     post:
       tags:
         - content
-      summary: 현재 위치 내 동선정보 조회
+      summary: 최근 24시간 위치 조회
       operationId: searchNearby
       description: 현재 주어진 위도 경도 주변에서 내 동선정보를 가져온다.
       produces:
