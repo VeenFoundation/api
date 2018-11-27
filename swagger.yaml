@@ -1934,22 +1934,21 @@ definitions:
         description: 컨텐츠 ID
         type: integer
         example: 1
-      behavior:
-        description: 행동을 나타내는 코드
+      category1:
+        description: 체크인 카테고리 1
         type: string
         example: SHOP
-      behaviorString:
-        description: userId, behavior, timestamp의 json string
+      category2:
+        description: 체크인 카테고리 2
         type: string
+        example: SHOES
+      hashtag:
+        description: 해시태그
+        type: string
+        example: 맛있당
       timestamp:
         description:  현재 시간(UTC)
         type: integer
-      signature:
-        description: behaviorString의 서명
-        type: string
-      publicKey:
-        description: 공개 키
-        type: string
   Transactions:
     type: array
     items:
