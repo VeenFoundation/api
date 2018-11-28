@@ -1934,14 +1934,10 @@ definitions:
         description: 컨텐츠 ID
         type: integer
         example: 1
-      category1:
-        description: 체크인 카테고리 1
+      category:
+        description: 체크인 카테고리
         type: string
         example: SHOP
-      category2:
-        description: 체크인 카테고리 2
-        type: string
-        example: SHOES
       hashtag:
         description: 해시태그
         type: string
