@@ -1833,9 +1833,6 @@ definitions:
       nowtime:
         description: 현재 폰 기준의 timestamp (UTC Timestamp)
         type: integer
-      zoom:
-        description: 지도의 크기 정보 (줌의 상태)
-        type: integer
   Content:
     type: object
     properties:
@@ -1862,6 +1859,14 @@ definitions:
               description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
               type: boolean
               example: true
+            category:
+              description: 카테고리
+              type: string
+              example: SHOP
+            hashtag:
+              description: 해시태그
+              type: string
+              example: 신발 쇼핑 중
             behavior:
               description: 행동을 나타내는 코드
               type: string
@@ -1902,6 +1907,14 @@ definitions:
         description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
         type: boolean
         example: true
+      category:
+        description: 카테고리
+        type: string
+        example: SHOP
+      hashtag:
+        description: 해시태그
+        type: string
+        example: 신발 쇼핑 중
       behavior:
         description: 행동을 나타내는 코드
         type: string
