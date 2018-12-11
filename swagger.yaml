@@ -1859,10 +1859,6 @@ definitions:
               description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
               type: boolean
               example: true
-            category:
-              description: 카테고리
-              type: string
-              example: SHOP
             hashtag:
               description: 해시태그
               type: array
@@ -1909,10 +1905,6 @@ definitions:
         description: 체크인인지 아닌지 여부 (내가 의도적으로 위치를 지정했는지 아닌지 차이)
         type: boolean
         example: true
-      category:
-        description: 카테고리
-        type: string
-        example: SHOP
       hashtag:
         description: 해시태그
         type: array
@@ -1951,10 +1943,6 @@ definitions:
         description: 컨텐츠 ID
         type: integer
         example: 1
-      category:
-        description: 체크인 카테고리
-        type: string
-        example: SHOP
       hashtag:
         description: 해시태그
         type: array
@@ -2012,10 +2000,6 @@ definitions:
               example: 5b4d4bd3fb6170b8c8c1b395
             behavior:
               description: 행동 기록
-              type: string
-              example: DINNER
-            category:
-              description: 행동 기록(체크인 카테고리)
               type: string
               example: DINNER
             hashtag:
