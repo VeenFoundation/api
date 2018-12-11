@@ -1914,8 +1914,9 @@ definitions:
       hashtag:
         description: 해시태그
         type: array
-          items:
-            type: string
+        items:
+          type: string
+          example: 쇼핑,신발,가방
       behavior:
         description: 행동을 나타내는 코드
         type: string
