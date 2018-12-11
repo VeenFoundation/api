@@ -1913,8 +1913,10 @@ definitions:
         example: SHOP
       hashtag:
         description: 해시태그
-        type: string
-        example: 신발 쇼핑 중
+        type: array
+          items:
+            type: string
+            example: "[쇼핑중, 신발, 백]"
       behavior:
         description: 행동을 나타내는 코드
         type: string
