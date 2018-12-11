@@ -1865,8 +1865,10 @@ definitions:
               example: SHOP
             hashtag:
               description: 해시태그
-              type: string
-              example: 신발 쇼핑 중
+              type: array
+              items:
+                type: string
+                example: 쇼핑
             behavior:
               description: 행동을 나타내는 코드
               type: string
@@ -1955,8 +1957,10 @@ definitions:
         example: SHOP
       hashtag:
         description: 해시태그
-        type: string
-        example: 맛있당
+        type: array
+        items:
+          type: string
+          example: 쇼핑
       timestamp:
         description:  현재 시간(UTC)
         type: integer
@@ -2016,8 +2020,10 @@ definitions:
               example: DINNER
             hashtag:
               description: 해시태그
-              type: string
-              example: 신발 쇼핑 중
+              type: array
+              items:
+                type: string
+                example: 쇼핑
             address:
               description: 기록된 주소
               type: string
