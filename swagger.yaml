@@ -393,6 +393,7 @@ paths:
   # 지갑 주소 유효성 검사
   /user/check_valid_wallet:
     get:
+      deprecated: true
       tags:
         - user
       summary: 지갑 주소 유효성 검사
@@ -400,6 +401,8 @@ paths:
         과거 지갑 생성을 할 때 지갑 주소가 error로 표기된 사람들이 있었음,
 
         그 사람들에게는 따로 지갑을 다시 만들라는 안내메시지를 표기하게끔 클라이언트에서 처리하는 용도로 구현함
+
+        현재로써는 사라져도 되는 API.
       operationId: checkWalletAddressValid
       produces:
         - application/json
