@@ -1943,6 +1943,10 @@ definitions:
         description: 컨텐츠 ID
         type: integer
         example: 1
+      behavior:
+        description: 행동 기록
+        type: string
+        example: HOME
       hashtag:
         description: 해시태그
         type: array
