@@ -1094,7 +1094,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Beta Test Verification
+          description: 행동 기록 API 폼
           required: true
           schema:
             $ref: '#/definitions/AddBehaviorToLocation'
@@ -1439,7 +1439,7 @@ definitions:
         description: 지갑 주소 값
         type: string
       publicKey:
-        description: 지갑의 공개키
+        description: (deprecated) 지갑의 공개키
         type: string
   VerifyBetaTester:
     type: object
@@ -1754,13 +1754,13 @@ definitions:
         description:  현재 시간(UTC)
         type: integer
       locationString:
-        description: userId, latitude, longitude, timestamp의 json string
+        description: (deprecated) userId, latitude, longitude, timestamp의 json string
         type: string
       locationSignature:
-        description: locatoinString의 서명
+        description: (deprecated) locatoinString의 서명
         type: string
       publicKey:
-        description: 공개 키
+        description: (deprecated) 공개 키
         type: string
       timeZone:
         type: integer
@@ -1898,9 +1898,8 @@ definitions:
           type: string
           example: 쇼핑
       timestamp:
-        description:  현재 시간(UTC)
+        description:  (deprecated) 현재 시간(UTC)
         type: integer
-        deprecated: true
   Transactions:
     type: array
     items:
@@ -1991,10 +1990,10 @@ definitions:
         description: Veen 금액
         type: integer
       publicKey:
-        description: 트랜잭션 서명 공개 키
+        description: (deprecated) 트랜잭션 서명 공개 키
         type: string
       signature:
-        description: 트랜잭션 서명
+        description: (deprecated) 트랜잭션 서명
         type: string
   Unauthorized:
     type: object
