@@ -1766,13 +1766,13 @@ definitions:
     type: object
     properties: 
       latitude:
-        description: 위도
+        description: (deprecated) 위도
         type: float
       longitude:
-        description: 경도
+        description: (deprecated) 경도
         type: float
       nowtime:
-        description: 현재 폰 기준의 timestamp (UTC Timestamp)
+        description: (deprecated) 현재 폰 기준의 timestamp (UTC Timestamp)
         type: integer
   Content:
     type: object
