@@ -1900,6 +1900,7 @@ definitions:
       timestamp:
         description:  현재 시간(UTC)
         type: integer
+        deprecated: true
   Transactions:
     type: array
     items:
