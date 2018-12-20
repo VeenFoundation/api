@@ -888,6 +888,7 @@ paths:
         - wallet
       summary: 송금내역조회
       operationId: fetchTransactions
+      description: 넘겨받은 쿼리스트링 값이 없으면 디폴트 값으로 최근 일주일의 값을 가져온다.
       produces:
         - application/json
       parameters:
@@ -907,16 +908,16 @@ paths:
           type: string
         - in: query
           name: filter
-          description: all, sent, received or reward 디폴트 값으로 all이 설정된다.
+          description: all, sent, received or reward 값이 없으면 디폴트 값으로 all이 설정된다.
           type: string
         - in: query
-          name: from
+          name: startdate
           type: string
-          description: 시간 조회 조건(UTC)
+          description: 조회 시작 날짜 (포맷: YYYY-MM-DD) 예시: '2018-12-01'
         - in: query
           name: until
-          type: string
-          description: 시간 조회 조건(UTC)
+          type: enddate
+          description: 조회 마지막 날짜 (포맷: YYYY-MM-DD) 예시: '2018-12-31'
       responses:
         default:
           description: Successful Operation
