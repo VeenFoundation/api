@@ -992,7 +992,7 @@ paths:
           schema:
             $ref: '#/definitions/ResponseMessage'
   # 이더 송금 내역 조회
-  /wallet/transactions:
+  /wallet/eth_transactions:
     get:
       tags:
         - wallet
