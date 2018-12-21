@@ -2241,7 +2241,7 @@ definitions:
         type: double
         example: 2132.20
   RewardHistory:
-    type: array
+    type: object
     properties:
       totalReward: 
         description: 전체 적립양
