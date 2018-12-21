@@ -2243,7 +2243,10 @@ definitions:
   RewardHistory:
     type: array
     properties:
-      totalReward: 121523.10283674736
+      totalReward: 
+        description: 전체 적립양
+        type: float
+        example: 121523.10283674736
       list: 
         type: array
         items:
