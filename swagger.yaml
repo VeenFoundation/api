@@ -1685,10 +1685,14 @@ definitions:
         description: 이메일 인증 여부, 1인경우에는 인증되었고 0인경우에는 인증되지 않은 회원이다.
         type: integer
         example : 1
-      veenRanking:
-        description: 빈 소유 랭킹을 백분율(%)로 표기한다.
+      rankRatio:
+        description: 빈 리워드 랭킹을 백분율(%)로 표기한다.
         type: float
         example: 0.23
+      rank:
+        description: 빈 리워드 랭킹을 숫자로 표기한다.
+        type: integer
+        example: 1
       registrationRanking:
         description: 가입 순위 랭킹
         type: integer
