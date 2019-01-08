@@ -2163,7 +2163,7 @@ definitions:
                   time:
                     description: 기록된 시간
                     type: string
-                    example: '12:20'
+                    example: '15:20'
                   isCheckIn:
                     description: 체크인 여부
                     type: boolean
