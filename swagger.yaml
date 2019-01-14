@@ -2302,44 +2302,42 @@ definitions:
         items:
           type: object
           properties:
-            contentId:
-              description: 컨텐츠 ID (UUID)
-              type: string
-              example: 5b4d4bd3fb6170b8c8c1b395
-            behavior:
-              description: 행동 기록
-              type: string
-              example: DINNER
-            hashtag:
-              description: 해시태그
+            YYYY-MM-DD:
+              description: today
               type: array
               items:
-                type: string
-                example: 쇼핑
-            address:
-              description: 기록된 주소
-              type: string
-              example: 서울특별시 서초구 우면동 태봉로 140
-            time:
-              description: 기록된 시간
-              type: string
-              example: 12:20
-            isCheckIn:
-              description: 체크인 여부
-              type: boolean
-              example: true
-            expected:
-              description: 흭득 예상 빈
-              type: double
-              example: 10
-            earned:
-              description: 실제로 받은 빈의 수
-              type: double
-              example: 5
-            isEarned: 
-              description: 해당 컨텐츠로 실제로 빈을 받은건지 아닌지 여부
-              type: boolean
-              example: true
+                type: object
+                properties:
+                  contentId:
+                    description: 컨텐츠 ID (UUID)
+                    type: string
+                    example: 5b4d4bd3fb6170b8c8c1b395
+                  canBeUpdated:
+                    description: 업데이트 가능 여부
+                    type: boolean
+                    example: false
+                  behavior:
+                    description: 행동 기록
+                    type: string
+                    example: DINNER
+                  hashtag:
+                    description: 해시태그
+                    type: array
+                    items:
+                      type: string
+                      example: 쇼핑
+                  address:
+                    description: 기록된 주소
+                    type: string
+                    example: '37.466069,127.028454'
+                  time:
+                    description: 기록된 시간
+                    type: string
+                    example: '15:20'
+                  isCheckIn:
+                    description: 체크인 여부
+                    type: boolean
+                    example: true
   SendTransaction:
     type: object
     properties:
