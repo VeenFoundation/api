@@ -394,6 +394,143 @@ paths:
           description: 서버 에러 발생시 발생한다.
           schema:
             $ref: '#/definitions/ResponseMessage'
+  # 비밀번호 변경 코드 전송
+  /user/request_init_password_code:
+    post:
+      tags:
+        - user
+      summary: 비밀번호 변경 코드 전송
+      description: 비밀번호 변경 코드를 전송한다. (비밀번호 찾기 기능을 수행할 때 사용한다.)
+      operationId: requestInitPasswordCode
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: body
+          name: body
+          description: email
+          required: true
+          schema:
+            $ref: '#/definitions/EmailOnly'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '403':
+          description: 사용자 계정이 이메일 인증이 완료되지 않는 경우
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '404':
+          description: 사용자 이메일이 존재하지 않는 경우 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 서버 에러 발생시 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 비밀번호 변경 코드 검증
+  /user/validate_init_password_code:
+    post:
+      tags:
+        - user
+      summary: 비밀번호 변경 코드 검증
+      description: 비밀번호 변경 코드를 검증한다.
+      operationId: validateInitPasswordCode
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: body
+          name: body
+          description: 이메일과 코드를 입력값으로 받는다.
+          required: true
+          schema:
+            $ref: '#/definitions/EmailWithCode'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '404':
+          description: 사용자 이메일이 존재하지 않는 경우 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 서버 에러 발생시 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+  # 임시코드로 비밀번호 변경하기
+  /user/change_password_with_code:
+    post:
+      tags:
+        - user
+      summary: 임시코드로 비밀번호 변경하기
+      description: 임시코드로 비밀번호를 변경한다.
+      operationId: changePasswordWithCode
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: lang
+          description: |
+            리턴 메시지의 언어를 구별할 때 사용한다.
+
+            현재는 'en', 'ko' 두가지 값이 있으며
+
+            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
+          type: string
+        - in: body
+          name: body
+          description: 이메일과 코드를 입력값으로 받는다.
+          required: true
+          schema:
+            $ref: '#/definitions/ChangePasswordWithCode'
+      responses:
+        default:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '400':
+          description: 입력값의 형식이 틀렸을 때 발생
+          schema:
+            $ref: '#/definitions/FormError'
+        '404':
+          description: 사용자 이메일이 존재하지 않는 경우 발생
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '422':
+          description: 비밀번호 임시 코드가 일치하지 않는 경우
+          schema:
+            $ref: '#/definitions/ResponseMessage'
+        '500':
+          description: 서버 에러 발생시 발생한다.
+          schema:
+            $ref: '#/definitions/ResponseMessage'
   # 지갑 등록
   /user/add/wallet:
     post:
@@ -1590,6 +1727,39 @@ definitions:
         description: 이메일
         type: string
         example: cailhuiris@finotek.co.kr
+  EmailOnly:
+    type: object
+    properties:
+      email:
+        description: 이메일
+        type: string
+        example: cailhuiris@finotek.co.kr
+  EmailWithCode:
+    type: object
+    properties:
+      email:
+        description: 이메일
+        type: string
+        example: cailhuiris@finotek.co.kr
+      code:
+        description: 비밀번호 변경 코드
+        type: string
+        example: 9jei3u8
+  ChangePasswordWithCode:
+    type: object
+    properties:
+      email:
+        description: 이메일
+        type: string
+        example: cailhuiris@finotek.co.kr
+      code:
+        description: 비밀번호 변경 코드
+        type: string
+        example: 9jei3u8
+      password:
+        description: 변경할 비밀번호
+        type: string
+        example: 1234qwer!
   CreateUser:
     type: object
     properties:
