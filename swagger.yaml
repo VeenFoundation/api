@@ -1667,18 +1667,12 @@ definitions:
   FormError:
     type: object
     properties:
-      userId:
+      inputName:
         description: '키에는 에러가 발생한 소스 값이 들어가고 내용에는 에러 메시지를 보여줍니다.'
         type: array
         items:
           type: string
-          example: '아이디 입력값은 반드시 입력해야 합니다.'
-      password:
-        description: '키에는 에러가 발생한 소스 값이 들어가고 내용에는 에러 메시지를 보여줍니다.'
-        type: array
-        items:
-          type: string
-          example: '비밀번호 입력값은 반드시 입력해야 합니다.'
+          example: 'inputName 입력값은 반드시 입력해야 합니다.'
   ResponseMessage:
     type: object
     properties:
