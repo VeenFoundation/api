@@ -347,53 +347,6 @@ paths:
           description: 서버 에러 발생시 발생한다.
           schema:
             $ref: '#/definitions/ResponseMessage'
-  # 비밀번호 초기화 메일 발송
-  /user/send_init_password_mail:
-    post:
-      tags:
-        - user
-      summary: 비밀번호 초기화 메일 발송
-      description: 이메일을 받으면 해당 이메일로 초기화 메일을 발송한다.
-      operationId: sendInitPasswordMail
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: lang
-          description: |
-            리턴 메시지의 언어를 구별할 때 사용한다.
-
-            현재는 'en', 'ko' 두가지 값이 있으며
-
-            헤더를 설정하지 않은 경우 기본값으로 'en'값이 설정된다.
-          type: string
-        - in: body
-          name: body
-          description: 비밀번호 초기화 메일을 발송할 이메일을 입력받는다.
-          required: true
-          schema:
-            $ref: '#/definitions/OnlyEmail'
-      responses:
-        default:
-          description: Successful Operation
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-        '400':
-          description: 입력값의 형식이 틀렸을 때 발생
-          schema:
-            $ref: '#/definitions/FormError'
-        '404':
-          description: 해당 이메일 정보로 사용자를 찾을 수 없을 때 발생한다.
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-        '423':
-          description: 이미 탈퇴한 회원일 경우 발생한다.
-          schema:
-            $ref: '#/definitions/ResponseMessage'
-        '500':
-          description: 서버 에러 발생시 발생한다.
-          schema:
-            $ref: '#/definitions/ResponseMessage'
   # 비밀번호 변경 코드 전송
   /user/request_init_password_code:
     post:
